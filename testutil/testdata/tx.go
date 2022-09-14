@@ -53,6 +53,10 @@ func NewTestMsg(addrs ...sdk.AccAddress) *TestMsg {
 
 var _ sdk.Msg = (*TestMsg)(nil)
 
+func (msg *TestMsg) IsPrivacy() bool {
+	return false
+}
+
 func (msg *TestMsg) Route() string { return "TestMsg" }
 func (msg *TestMsg) Type() string  { return "Test message" }
 func (msg *TestMsg) GetSignBytes() []byte {
@@ -78,6 +82,10 @@ func (msg *TestMsg) GetSigners() []sdk.AccAddress {
 func (msg *TestMsg) ValidateBasic() error { return nil }
 
 var _ sdk.Msg = &MsgCreateDog{}
+
+func (msg *MsgCreateDog) IsPrivacy() bool {
+	return false
+}
 
 func (msg *MsgCreateDog) GetSigners() []sdk.AccAddress { return []sdk.AccAddress{} }
 func (msg *MsgCreateDog) ValidateBasic() error         { return nil }

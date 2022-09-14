@@ -36,6 +36,10 @@ func NewMsgGrantAllowance(feeAllowance FeeAllowanceI, granter, grantee sdk.AccAd
 	}, nil
 }
 
+func (msg MsgGrantAllowance) IsPrivacy() bool { return false }
+
+func (msg MsgRevokeAllowance) IsPrivacy() bool { return false }
+
 // ValidateBasic implements the sdk.Msg interface.
 func (msg MsgGrantAllowance) ValidateBasic() error {
 	if msg.Granter == "" {

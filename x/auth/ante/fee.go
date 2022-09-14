@@ -20,6 +20,10 @@ func NewMempoolFeeDecorator() MempoolFeeDecorator {
 	return MempoolFeeDecorator{}
 }
 
+func (mfd MempoolFeeDecorator) IsPrivacy() bool {
+	return false
+}
+
 func (mfd MempoolFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
@@ -70,6 +74,10 @@ func NewDeductFeeDecorator(ak AccountKeeper, bk types.BankKeeper, fk FeegrantKee
 		bankKeeper:     bk,
 		feegrantKeeper: fk,
 	}
+}
+
+func (dfd DeductFeeDecorator) IsPrivacy() bool {
+	return false
 }
 
 func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {

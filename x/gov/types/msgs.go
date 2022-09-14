@@ -25,6 +25,11 @@ var (
 	_          types.UnpackInterfacesMessage = &MsgSubmitProposal{}
 )
 
+func (m *MsgSubmitProposal) IsPrivacy() bool { return false }
+func (m *MsgDeposit) IsPrivacy() bool        { return false }
+func (m *MsgVote) IsPrivacy() bool           { return false }
+func (m *MsgVoteWeighted) IsPrivacy() bool   { return false }
+
 // NewMsgSubmitProposal creates a new MsgSubmitProposal.
 //nolint:interfacer
 func NewMsgSubmitProposal(content Content, initialDeposit sdk.Coins, proposer sdk.AccAddress) (*MsgSubmitProposal, error) {

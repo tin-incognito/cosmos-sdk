@@ -30,6 +30,10 @@ type wrapper struct {
 	txBodyHasUnknownNonCriticals bool
 }
 
+func (w *wrapper) IsPrivacy() (bool, error) {
+	return tx.IsPrivacyTx(w.tx)
+}
+
 var (
 	_ authsigning.Tx             = &wrapper{}
 	_ client.TxBuilder           = &wrapper{}

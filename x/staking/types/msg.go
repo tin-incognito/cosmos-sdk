@@ -52,6 +52,12 @@ func NewMsgCreateValidator(
 	}, nil
 }
 
+func (msg MsgCreateValidator) IsPrivacy() bool { return false }
+func (msg MsgEditValidator) IsPrivacy() bool   { return false }
+func (msg MsgDelegate) IsPrivacy() bool        { return false }
+func (msg MsgUndelegate) IsPrivacy() bool      { return false }
+func (msg MsgBeginRedelegate) IsPrivacy() bool { return false }
+
 // Route implements the sdk.Msg interface.
 func (msg MsgCreateValidator) Route() string { return RouterKey }
 

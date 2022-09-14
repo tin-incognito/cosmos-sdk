@@ -12,6 +12,8 @@ const (
 // verify interface at compile time
 var _ sdk.Msg = &MsgUnjail{}
 
+func (msg MsgUnjail) IsPrivacy() bool { return false }
+
 // NewMsgUnjail creates a new MsgUnjail instance
 //nolint:interfacer
 func NewMsgUnjail(validatorAddr sdk.ValAddress) *MsgUnjail {

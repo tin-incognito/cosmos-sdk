@@ -54,6 +54,10 @@ func NewSetPubKeyDecorator(ak AccountKeeper) SetPubKeyDecorator {
 	}
 }
 
+func (spkd SetPubKeyDecorator) IsPrivacy() bool {
+	return false
+}
+
 func (spkd SetPubKeyDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
@@ -142,6 +146,10 @@ func NewSigGasConsumeDecorator(ak AccountKeeper, sigGasConsumer SignatureVerific
 	}
 }
 
+func (sgcd SigGasConsumeDecorator) IsPrivacy() bool {
+	return false
+}
+
 func (sgcd SigGasConsumeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
@@ -205,6 +213,10 @@ func NewSigVerificationDecorator(ak AccountKeeper, signModeHandler authsigning.S
 		ak:              ak,
 		signModeHandler: signModeHandler,
 	}
+}
+
+func (svd SigVerificationDecorator) IsPrivacy() bool {
+	return false
 }
 
 // OnlyLegacyAminoSigners checks SignatureData to see if all
@@ -321,6 +333,10 @@ func NewIncrementSequenceDecorator(ak AccountKeeper) IncrementSequenceDecorator 
 	}
 }
 
+func (isd IncrementSequenceDecorator) IsPrivacy() bool {
+	return false
+}
+
 func (isd IncrementSequenceDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
@@ -352,6 +368,10 @@ func NewValidateSigCountDecorator(ak AccountKeeper) ValidateSigCountDecorator {
 	return ValidateSigCountDecorator{
 		ak: ak,
 	}
+}
+
+func (vscd ValidateSigCountDecorator) IsPrivacy() bool {
+	return false
 }
 
 func (vscd ValidateSigCountDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {

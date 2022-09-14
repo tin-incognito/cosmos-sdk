@@ -23,6 +23,10 @@ func NewMsgSetWithdrawAddress(delAddr, withdrawAddr sdk.AccAddress) *MsgSetWithd
 	}
 }
 
+func (msg MsgSetWithdrawAddress) IsPrivacy() bool          { return false }
+func (msg MsgWithdrawDelegatorReward) IsPrivacy() bool     { return false }
+func (msg MsgWithdrawValidatorCommission) IsPrivacy() bool { return false }
+
 func (msg MsgSetWithdrawAddress) Route() string { return ModuleName }
 func (msg MsgSetWithdrawAddress) Type() string  { return TypeMsgSetWithdrawAddress }
 
@@ -129,6 +133,8 @@ func NewMsgFundCommunityPool(amount sdk.Coins, depositor sdk.AccAddress) *MsgFun
 		Depositor: depositor.String(),
 	}
 }
+
+func (msg MsgFundCommunityPool) IsPrivacy() bool { return false }
 
 // Route returns the MsgFundCommunityPool message route.
 func (msg MsgFundCommunityPool) Route() string { return ModuleName }

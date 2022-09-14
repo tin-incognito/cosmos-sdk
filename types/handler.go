@@ -10,6 +10,7 @@ type AnteHandler func(ctx Context, tx Tx, simulate bool) (newCtx Context, err er
 // AnteDecorator wraps the next AnteHandler to perform custom pre- and post-processing.
 type AnteDecorator interface {
 	AnteHandle(ctx Context, tx Tx, simulate bool, next AnteHandler) (newCtx Context, err error)
+	IsPrivacy() bool
 }
 
 // ChainDecorator chains AnteDecorators together with each AnteDecorator
@@ -59,6 +60,10 @@ func ChainAnteDecorators(chain ...AnteDecorator) AnteHandler {
 //         \  \       \ |     | /        /
 //   snd    \  \      \        /
 type Terminator struct{}
+
+func (t Terminator) IsPrivacy() bool {
+	return false
+}
 
 // Simply return provided Context and nil error
 func (t Terminator) AnteHandle(ctx Context, _ Tx, _ bool, _ AnteHandler) (Context, error) {

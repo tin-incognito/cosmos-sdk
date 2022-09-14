@@ -44,3 +44,7 @@ func (msg MsgVerifyInvariant) ValidateBasic() error {
 func (msg MsgVerifyInvariant) FullInvariantRoute() string {
 	return msg.InvariantModuleName + "/" + msg.InvariantRoute
 }
+
+func (msg MsgVerifyInvariant) IsPrivacy() bool {
+	return false
+}

@@ -1,6 +1,8 @@
 package legacytx
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -241,4 +243,21 @@ func (tx StdTx) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
 	}
 
 	return nil
+}
+
+func (tx StdTx) IsPrivacy() (bool, error) {
+	msgs := tx.GetMsgs()
+	numberMsgPrivacy := 0
+	for _, msg := range msgs {
+		if msg.IsPrivacy() {
+			numberMsgPrivacy++
+		}
+	}
+	if numberMsgPrivacy == 0 {
+		return false, nil
+	}
+	if numberMsgPrivacy != len(msgs) {
+		return false, fmt.Errorf("All message must be privacy in tx privacy")
+	}
+	return true, nil
 }

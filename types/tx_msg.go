@@ -19,6 +19,9 @@ type (
 		// CONTRACT: All signatures must be present to be valid.
 		// CONTRACT: Returns addrs in some deterministic order.
 		GetSigners() []AccAddress
+
+		// If this message if from privacy module
+		IsPrivacy() bool
 	}
 
 	// Fee defines an interface for an application application-defined concrete
@@ -43,6 +46,9 @@ type (
 		// ValidateBasic does a simple and lightweight validation check that doesn't
 		// require access to any other information.
 		ValidateBasic() error
+
+		// If this tx has message from privacy module
+		IsPrivacy() (bool, error)
 	}
 
 	// FeeTx defines the interface to be implemented by Tx to use the FeeDecorators

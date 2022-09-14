@@ -41,6 +41,18 @@ func NewMsgGrant(granter sdk.AccAddress, grantee sdk.AccAddress, a Authorization
 	return m, nil
 }
 
+func (msg MsgGrant) IsPrivacy() bool {
+	return false
+}
+
+func (msg MsgRevoke) IsPrivacy() bool {
+	return false
+}
+
+func (msg MsgExec) IsPrivacy() bool {
+	return false
+}
+
 // GetSigners implements Msg
 func (msg MsgGrant) GetSigners() []sdk.AccAddress {
 	granter, err := sdk.AccAddressFromBech32(msg.Granter)

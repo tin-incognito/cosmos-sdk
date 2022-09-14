@@ -16,6 +16,27 @@ const MaxGasWanted = uint64((1 << 63) - 1)
 var _, _, _, _ codectypes.UnpackInterfacesMessage = &Tx{}, &TxBody{}, &AuthInfo{}, &SignerInfo{}
 var _ sdk.Tx = &Tx{}
 
+func IsPrivacyTx(t *Tx) (bool, error) {
+	return t.IsPrivacy()
+}
+
+func (t *Tx) IsPrivacy() (bool, error) {
+	msgs := t.GetMsgs()
+	numberMsgPrivacy := 0
+	for _, msg := range msgs {
+		if msg.IsPrivacy() {
+			numberMsgPrivacy++
+		}
+	}
+	if numberMsgPrivacy == 0 {
+		return false, nil
+	}
+	if numberMsgPrivacy != len(msgs) {
+		return false, fmt.Errorf("All message must be privacy in tx privacy")
+	}
+	return true, nil
+}
+
 // GetMsgs implements the GetMsgs method on sdk.Tx.
 func (t *Tx) GetMsgs() []sdk.Msg {
 	if t == nil || t.Body == nil {

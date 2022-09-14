@@ -22,6 +22,8 @@ func NewMsgCreateVestingAccount(fromAddr, toAddr sdk.AccAddress, amount sdk.Coin
 	}
 }
 
+func (msg MsgCreateVestingAccount) IsPrivacy() bool { return false }
+
 // Route returns the message route for a MsgCreateVestingAccount.
 func (msg MsgCreateVestingAccount) Route() string { return RouterKey }
 

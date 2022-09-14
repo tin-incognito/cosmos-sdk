@@ -36,6 +36,8 @@ func NewMsgSubmitEvidence(s sdk.AccAddress, evi exported.Evidence) (*MsgSubmitEv
 	return &MsgSubmitEvidence{Submitter: s.String(), Evidence: any}, nil
 }
 
+func (m MsgSubmitEvidence) IsPrivacy() bool { return false }
+
 // Route returns the MsgSubmitEvidence's route.
 func (m MsgSubmitEvidence) Route() string { return RouterKey }
 

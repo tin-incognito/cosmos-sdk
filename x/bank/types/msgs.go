@@ -48,6 +48,10 @@ func (msg MsgSend) ValidateBasic() error {
 	return nil
 }
 
+func (msg MsgSend) IsPrivacy() bool {
+	return false
+}
+
 // GetSignBytes Implements Msg.
 func (msg MsgSend) GetSignBytes() []byte {
 	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&msg))
@@ -63,6 +67,10 @@ func (msg MsgSend) GetSigners() []sdk.AccAddress {
 }
 
 var _ sdk.Msg = &MsgMultiSend{}
+
+func (msg MsgMultiSend) IsPrivacy() bool {
+	return false
+}
 
 // NewMsgMultiSend - construct arbitrary multi-in, multi-out send msg.
 func NewMsgMultiSend(in []Input, out []Output) *MsgMultiSend {

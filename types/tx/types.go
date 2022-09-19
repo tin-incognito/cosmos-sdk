@@ -106,7 +106,12 @@ func (t *Tx) ValidateBasic() error {
 
 	sigs := t.Signatures
 
-	if len(sigs) == 0 {
+	isPrivacy, err := t.IsPrivacy()
+	if err != nil {
+		return err
+	}
+
+	if len(sigs) == 0 && !isPrivacy {
 		return sdkerrors.ErrNoSignatures
 	}
 

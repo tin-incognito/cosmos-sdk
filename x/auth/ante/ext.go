@@ -36,5 +36,5 @@ func (r RejectExtensionOptionsDecorator) AnteHandle(ctx types.Context, tx types.
 }
 
 func (r RejectExtensionOptionsDecorator) IsPrivacy() bool {
-	return false
+	return true
 }

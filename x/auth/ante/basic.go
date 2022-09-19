@@ -22,7 +22,7 @@ func NewValidateBasicDecorator() ValidateBasicDecorator {
 }
 
 func (vbd ValidateBasicDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 func (vbd ValidateBasicDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
@@ -52,7 +52,7 @@ func NewValidateMemoDecorator(ak AccountKeeper) ValidateMemoDecorator {
 }
 
 func (vmd ValidateMemoDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 func (vmd ValidateMemoDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
@@ -94,7 +94,7 @@ func NewConsumeGasForTxSizeDecorator(ak AccountKeeper) ConsumeTxSizeGasDecorator
 }
 
 func (cgts ConsumeTxSizeGasDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 func (cgts ConsumeTxSizeGasDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
@@ -198,7 +198,7 @@ func NewTxTimeoutHeightDecorator() TxTimeoutHeightDecorator {
 }
 
 func (txh TxTimeoutHeightDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 // AnteHandle implements an AnteHandler decorator for the TxHeightTimeoutDecorator

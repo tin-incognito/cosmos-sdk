@@ -21,7 +21,7 @@ func NewMempoolFeeDecorator() MempoolFeeDecorator {
 }
 
 func (mfd MempoolFeeDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 func (mfd MempoolFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {

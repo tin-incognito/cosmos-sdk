@@ -30,7 +30,7 @@ func NewSetUpContextDecorator() SetUpContextDecorator {
 }
 
 func (sud SetUpContextDecorator) IsPrivacy() bool {
-	return false
+	return true
 }
 
 func (sud SetUpContextDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {

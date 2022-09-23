@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cosmos.privacy.privacy;
+
+option go_package = "x/privacy/types";
+
+message OnetimeAddress {
+  string index = 1; 
+  bool is_confidential_asset = 2;
+  bytes public_key = 3;
+  bytes i = 4;
+  int32 status = 5;
+}

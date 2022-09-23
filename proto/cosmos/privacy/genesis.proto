@@ -1,0 +1,26 @@
+syntax = "proto3";
+package cosmos.privacy.privacy;
+
+import "gogoproto/gogo.proto";
+import "cosmos/privacy/serial_number.proto";
+import "cosmos/privacy/params.proto";
+import "cosmos/privacy/output_coin.proto";
+import "cosmos/privacy/commitment.proto";
+import "cosmos/privacy/token.proto";
+import "cosmos/privacy/onetime_address.proto";
+import "cosmos/privacy/ota_coin.proto";
+import "cosmos/privacy/output_coin_length.proto";
+
+option go_package = "x/privacy/types";
+
+// GenesisState defines the privacy module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated SerialNumber serialNumberList = 2 [(gogoproto.nullable) = false];
+  repeated OutputCoin outputCoinList = 3 [(gogoproto.nullable) = false];
+  repeated Commitment commitmentList = 4 [(gogoproto.nullable) = false];
+  repeated Token tokenList = 5 [(gogoproto.nullable) = false];
+  repeated OnetimeAddress onetimeAddressList = 6 [(gogoproto.nullable) = false];
+  repeated OTACoin oTACoinList = 7 [(gogoproto.nullable) = false];
+  OutputCoinLength outputCoinLength = 8;
+}

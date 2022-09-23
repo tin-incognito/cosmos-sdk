@@ -1,0 +1,10 @@
+syntax = "proto3";
+package cosmos.privacy.privacy;
+
+option go_package = "x/privacy/types";
+
+message SerialNumber {
+  string index = 1; 
+  bool is_confidential_asset = 2;
+  bytes value = 3;
+}

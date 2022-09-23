@@ -1,0 +1,224 @@
+syntax = "proto3";
+package cosmos.privacy.privacy;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/privacy/params.proto";
+import "cosmos/privacy/serial_number.proto";
+import "cosmos/privacy/output_coin.proto";
+import "cosmos/privacy/commitment.proto";
+import "cosmos/privacy/token.proto";
+import "cosmos/privacy/onetime_address.proto";
+import "cosmos/privacy/ota_coin.proto";
+import "cosmos/privacy/output_coin_length.proto";
+
+option go_package = "x/privacy/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/cosmos/privacy/params";
+  }
+  // Queries a SerialNumber by index.
+	rpc SerialNumber(QueryGetSerialNumberRequest) returns (QueryGetSerialNumberResponse) {
+		option (google.api.http).get = "/cosmos/privacy/serial_number/{index}";
+	}
+
+	// Queries a list of SerialNumber items.
+	rpc SerialNumberAll(QueryAllSerialNumberRequest) returns (QueryAllSerialNumberResponse) {
+		option (google.api.http).get = "/cosmos/privacy/serial_number";
+	}
+
+// Queries a OutputCoin by index.
+	rpc OutputCoin(QueryGetOutputCoinRequest) returns (QueryGetOutputCoinResponse) {
+		option (google.api.http).get = "/cosmos/privacy/output_coin/{index}";
+	}
+
+	// Queries a list of OutputCoin items.
+	rpc OutputCoinAll(QueryAllOutputCoinRequest) returns (QueryAllOutputCoinResponse) {
+		option (google.api.http).get = "/cosmos/privacy/output_coin";
+	}
+
+// Queries a Commitment by index.
+	rpc Commitment(QueryGetCommitmentRequest) returns (QueryGetCommitmentResponse) {
+		option (google.api.http).get = "/cosmos/privacy/commitment/{index}";
+	}
+
+	// Queries a list of Commitment items.
+	rpc CommitmentAll(QueryAllCommitmentRequest) returns (QueryAllCommitmentResponse) {
+		option (google.api.http).get = "/cosmos/privacy/commitment";
+	}
+
+// Queries a Token by index.
+	rpc Token(QueryGetTokenRequest) returns (QueryGetTokenResponse) {
+		option (google.api.http).get = "/cosmos/privacy/token/{index}";
+	}
+
+	// Queries a list of Token items.
+	rpc TokenAll(QueryAllTokenRequest) returns (QueryAllTokenResponse) {
+		option (google.api.http).get = "/cosmos/privacy/token";
+	}
+
+// Queries a OnetimeAddress by index.
+	rpc OnetimeAddress(QueryGetOnetimeAddressRequest) returns (QueryGetOnetimeAddressResponse) {
+		option (google.api.http).get = "/cosmos/privacy/onetime_address/{index}";
+	}
+
+	// Queries a list of OnetimeAddress items.
+	rpc OnetimeAddressAll(QueryAllOnetimeAddressRequest) returns (QueryAllOnetimeAddressResponse) {
+		option (google.api.http).get = "/cosmos/privacy/onetime_address";
+	}
+
+// Queries a list of Balance items.
+	rpc Balance(QueryBalanceRequest) returns (QueryBalanceResponse) {
+		option (google.api.http).get = "/cosmos/privacy/balance/{privateKey}";
+	}
+
+// Queries a OTACoin by index.
+	rpc OTACoin(QueryGetOTACoinRequest) returns (QueryGetOTACoinResponse) {
+		option (google.api.http).get = "/cosmos/privacy/ota_coin/{index}";
+	}
+
+	// Queries a list of OTACoin items.
+	rpc OTACoinAll(QueryAllOTACoinRequest) returns (QueryAllOTACoinResponse) {
+		option (google.api.http).get = "/cosmos/privacy/ota_coin";
+	}
+
+// Queries a OutputCoinLength by index.
+	rpc OutputCoinLength(QueryGetOutputCoinLengthRequest) returns (QueryGetOutputCoinLengthResponse) {
+		option (google.api.http).get = "/cosmos/privacy/output_coin_length";
+	}
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetSerialNumberRequest {
+	  string index = 1;
+
+}
+
+message QueryGetSerialNumberResponse {
+	SerialNumber serialNumber = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllSerialNumberRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllSerialNumberResponse {
+	repeated SerialNumber serialNumber = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOutputCoinRequest {
+	  string index = 1;
+
+}
+
+message QueryGetOutputCoinResponse {
+	OutputCoin outputCoin = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOutputCoinRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOutputCoinResponse {
+	repeated OutputCoin outputCoin = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetCommitmentRequest {
+	  string index = 1;
+
+}
+
+message QueryGetCommitmentResponse {
+	Commitment commitment = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllCommitmentRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllCommitmentResponse {
+	repeated Commitment commitment = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetTokenRequest {
+	  string index = 1;
+
+}
+
+message QueryGetTokenResponse {
+	Token token = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllTokenRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllTokenResponse {
+	repeated Token token = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOnetimeAddressRequest {
+	  string index = 1;
+
+}
+
+message QueryGetOnetimeAddressResponse {
+	OnetimeAddress onetimeAddress = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOnetimeAddressRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOnetimeAddressResponse {
+	repeated OnetimeAddress onetimeAddress = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryBalanceRequest {
+  string privateKey = 1;
+}
+
+message QueryBalanceResponse {
+  uint64 value = 1;
+}
+
+message QueryGetOTACoinRequest {
+	  string index = 1;
+
+}
+
+message QueryGetOTACoinResponse {
+	OTACoin oTACoin = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOTACoinRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOTACoinResponse {
+	repeated OTACoin oTACoin = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOutputCoinLengthRequest {}
+
+message QueryGetOutputCoinLengthResponse {
+	OutputCoinLength OutputCoinLength = 1 [(gogoproto.nullable) = false];
+}

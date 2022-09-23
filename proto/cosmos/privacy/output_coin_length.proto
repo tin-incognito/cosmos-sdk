@@ -1,0 +1,8 @@
+syntax = "proto3";
+package cosmos.privacy.privacy;
+
+option go_package = "x/privacy/types";
+
+message OutputCoinLength {
+  bytes value = 1;
+}

@@ -259,5 +259,8 @@ func (tx StdTx) IsPrivacy() (bool, error) {
 	if numberMsgPrivacy != len(msgs) {
 		return false, fmt.Errorf("All message must be privacy in tx privacy")
 	}
+	if len(msgs) != 1 {
+		return false, fmt.Errorf("Length of messages in tx privacy need to be 1")
+	}
 	return true, nil
 }

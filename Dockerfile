@@ -36,6 +36,8 @@ WORKDIR /root
 # Copy over binaries from the build-env
 COPY --from=build-env /go/src/github.com/cosmos/cosmos-sdk/build/simd /usr/bin/simd
 
+COPY scripts/init-chain.sh  ./init-chain.sh
+
 EXPOSE 26656 26657 1317 9090
 
 # Run simd by default, omit entrypoint to ease using container with simcli

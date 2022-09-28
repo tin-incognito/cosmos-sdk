@@ -1,7 +1,9 @@
 package repos
 
 import (
+	"encoding/base64"
 	"fmt"
+	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/bulletproofs"
@@ -235,4 +237,79 @@ func (p *PaymentProof) SetOutputCoinAtIndex(index int, c *coin.Coin) error {
 
 func (p *PaymentProof) SetAggregatedRangeProof(proof *bulletproofs.AggregatedRangeProof) {
 	p.aggregatedRangeProof = proof
+}
+
+func (p *PaymentProof) ValidateSanity() (bool, error) {
+	if len(p.inputCoins) > 255 {
+		return false, fmt.Errorf("Input coins in tx are very large:" + strconv.Itoa(len(p.inputCoins)))
+	}
+
+	if len(p.outputCoins) > 255 {
+		return false, fmt.Errorf("Output coins in tx are very large:" + strconv.Itoa(len(p.outputCoins)))
+	}
+
+	if !p.aggregatedRangeProof.ValidateSanity() {
+		return false, fmt.Errorf("validate sanity Aggregated range proof failed")
+	}
+
+	// check output coins with privacy
+	duplicatePublicKeys := make(map[string]bool)
+	outputCoins := p.outputCoins
+	// cmsValues := proof.aggregatedRangeProof.GetCommitments()
+	for _, outputCoin := range outputCoins {
+		if outputCoin.GetPublicKey() == nil || !outputCoin.GetPublicKey().PointValid() {
+			return false, fmt.Errorf("validate sanity Public key of output coin failed")
+		}
+
+		// check duplicate output addresses
+		pubkeyStr := string(outputCoin.GetPublicKey().ToBytesS())
+		if _, ok := duplicatePublicKeys[pubkeyStr]; ok {
+			return false, fmt.Errorf("Cannot have duplicate publickey ")
+		}
+		duplicatePublicKeys[pubkeyStr] = true
+
+		if !outputCoin.GetCommitment().PointValid() {
+			return false, fmt.Errorf("validate sanity Coin commitment of output coin failed")
+		}
+
+		/*// re-compute the commitment if the output coin's address is the burning address*/
+		/*// burn TX cannot use confidential asset]*/
+		/*// BOOKMARK*/
+		/*if common.IsPublicKeyBurningAddress(outputCoins[i].GetPublicKey().ToBytesS()) {*/
+		/*value := outputCoin.GetValue()*/
+		/*rand := outputCoin.GetRandomness()*/
+		/*commitment := operation.PedCom.CommitAtIndex(new(operation.Scalar).FromUint64(value), rand, coin.PedersenValueIndex)*/
+		/*outputCoinSpecific, ok := outputCoin.(*coin.CoinV2)*/
+		/*if !ok {*/
+		/*return false, errors.New("Validate sanity - Cannot cast a coin to v2")*/
+		/*}*/
+		/*if outputCoinSpecific.GetAssetTag() != nil {*/
+		/*com, err := outputCoinSpecific.ComputeCommitmentCA()*/
+		/*if err != nil {*/
+		/*return false, errors.New("Cannot compute commitment for confidential asset")*/
+		/*}*/
+		/*commitment = com*/
+		/*}*/
+		/*if !operation.IsPointEqual(commitment, outputCoin.GetCommitment()) {*/
+		/*return false, errors.New("validate sanity Coin commitment of burned coin failed")*/
+		/*}*/
+		/*}*/
+	}
+	return true, nil
+}
+
+func (p *PaymentProof) Verify() (bool, error) {
+	inputCoins := p.inputCoins
+	dupMap := make(map[string]bool)
+	for _, inCoin := range inputCoins {
+		identifier := base64.StdEncoding.EncodeToString(inCoin.GetKeyImage().ToBytesS())
+		_, exists := dupMap[identifier]
+		if exists {
+			return false, fmt.Errorf("Duplicate input inCoin in PaymentProofV2")
+		}
+		dupMap[identifier] = true
+	}
+	return true, nil
+
+	//return proof.verifyHasConfidentialAsset(isBatch)
 }

@@ -413,6 +413,7 @@ func NewSimApp(
 			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+			PrivacyKeeper:   app.PrivacyKeeper,
 		},
 	)
 

@@ -7,6 +7,8 @@ const (
 	ZeroByte          = byte(0x00)
 	CheckSumLen       = 4  // bytes
 	PrivateKeySize    = 32 // bytes
+	MaxTxSize         = 500
+	MaxSizeInfo       = 512
 )
 
 const (

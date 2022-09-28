@@ -1,9 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
@@ -17,7 +17,6 @@ func BuildMintTx(
 	amount uint64,
 	info []byte,
 	md []byte,
-	hashedMessage common.Hash,
 ) (*types.MsgPrivacyData, error) {
 	privateKey := GeneratePrivateKey()
 	outputCoin, err := GenerateOutputCoin(amount, info, otaReceiver)
@@ -27,8 +26,11 @@ func BuildMintTx(
 
 	proof := repos.NewPaymentProof()
 	proof.SetOutputCoins([]*coin.Coin{outputCoin})
+	lockTime := uint64(time.Now().Unix())
 
-	sig, sigPubKey, err := SignNoPrivacy(&privateKey, hashedMessage.Bytes())
+	hash := MsgHash(lockTime, 0, proof, nil)
+
+	sig, sigPubKey, err := SignNoPrivacy(&privateKey, hash.Bytes())
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +39,7 @@ func BuildMintTx(
 		Proof:     proof.Bytes(),
 		SigPubKey: sigPubKey,
 		Sig:       sig,
-		LockTime:  uint64(time.Now().Unix()),
+		LockTime:  lockTime,
 		Info:      info,
 		TxType:    TxMintType,
 		Metadata:  md,
@@ -61,4 +63,32 @@ func SignNoPrivacy(privateKey *key.PrivateKey, hashedMessage []byte) (signatureB
 	signatureBytes = signature.Bytes()
 	sigPubKey = sigKey.GetPublicKey().GetPublicKey().ToBytesS()
 	return signatureBytes, sigPubKey, nil
+}
+
+func VerifySigNoPrivacy(sig, sigPubKey, hashedMessage []byte) (bool, error) {
+	// check input transaction
+	if sig == nil || sigPubKey == nil {
+		return false, fmt.Errorf("transaction input must be signed")
+	}
+
+	var err error
+	/****** verify Schnorr signature *****/
+	// prepare Public key for verification
+	verifyKey := new(schnorr.SchnorrPublicKey)
+	sigPublicKey, err := new(operation.Point).FromBytesS(sigPubKey)
+
+	if err != nil {
+		return false, err
+	}
+	verifyKey.Set(sigPublicKey)
+
+	// convert signature from byte array to SchnorrSign
+	signature := new(schnorr.SchnSignature)
+	err = signature.SetBytes(sig)
+	if err != nil {
+		return false, err
+	}
+
+	res := verifyKey.Verify(signature, hashedMessage)
+	return res, nil
 }

@@ -23,6 +23,14 @@ func (vsd ValidateSanityDecorator) IsPrivacy() bool {
 }
 
 func (vsd ValidateSanityDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	isPrivate, err := tx.IsPrivacy()
+	if err != nil {
+		return ctx, err
+	}
+	if !isPrivate {
+		return next(ctx, tx, simulate)
+	}
+
 	// no need to check index, has been checked before
 	msg := tx.GetMsgs()[0]
 	isValid, err := validateSanity(msg)

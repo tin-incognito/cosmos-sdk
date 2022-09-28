@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	types2 "github.com/cosmos/cosmos-sdk/types"
 	"math/big"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
@@ -18,7 +19,7 @@ import (
 func BuildTransferTx(
 	keySet key.KeySet,
 	msgTransferPaymentInfos []*types.MsgTransfer_PaymentInfo,
-	feePerKb uint64, hashedMessage common.Hash,
+	gasLimit uint64, gasPrice types2.Dec, hashedMessage common.Hash,
 ) (*types.MsgPrivacyData, error) {
 	var amount uint64
 	var err error
@@ -29,13 +30,15 @@ func BuildTransferTx(
 		}
 	}
 
+	//TODO: get coin by keyset query
 	httpClient := http.NewClient()
 	outcoins, err := httpClient.AllOutputCoin()
 	if err != nil {
+
 		return nil, err
 	}
 
-	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, feePerKb, nil)
+	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, gasLimit, gasPrice)
 	if err != nil {
 		return nil, err
 	}

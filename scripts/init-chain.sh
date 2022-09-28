@@ -15,4 +15,12 @@ fi
 simd add-genesis-account $MY_VALIDATOR_ADDRESS 100000000000stake
 echo 12345678 |  simd gentx my_validator 100000000stake --chain-id my-test-chain
 simd collect-gentxs
-simd start
+
+(
+cd ~/.simapp/config
+sed -i '/\[api\]/,+3 s/enable = false/enable = true/' app.toml
+jq '.app_state.gov.voting_params.voting_period = "600s"' genesis.json > temp.json && mv temp.json genesis.json
+jq '.app_state.mint.minter.inflation = "0.300000000000000000"' genesis.json > temp.json && mv temp.json genesis.json
+)
+
+simd start --log_level info

@@ -90,6 +90,11 @@ service Query {
 	rpc OutputCoinLength(QueryGetOutputCoinLengthRequest) returns (QueryGetOutputCoinLengthResponse) {
 		option (google.api.http).get = "/cosmos/privacy/output_coin_length";
 	}
+
+	// Queries estimateFee
+	rpc EstimateFee(QueryEstimateFeeRequest) returns (QueryEstimateFeeResponse) {
+		option (google.api.http).get = "/cosmos/privacy/estimate_fee";
+	}
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -221,4 +226,12 @@ message QueryGetOutputCoinLengthRequest {}
 
 message QueryGetOutputCoinLengthResponse {
 	OutputCoinLength OutputCoinLength = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryEstimateFeeRequest {
+	string privacyData = 1;
+}
+
+message QueryEstimateFeeResponse {
+	string text = 1;
 }

@@ -17,6 +17,7 @@ cat <<EOF >Dockerfile3
 FROM alpine:edge
 # Install ca-certificates
 RUN apk add --update ca-certificates
+RUN apk add --no-cache jq
 WORKDIR /root
 # Copy over binaries from the build-env
 COPY simd /usr/bin/simd
@@ -28,4 +29,5 @@ EOF
 docker build -t simapp -f Dockerfile3 .
 rm simd Dockerfile3
 
-docker run -ti --rm -v /tmp/testchain:/root/.simapp --name simapp simapp sh init-chain.sh
+docker run -ti --rm --network host -v /tmp/testchain:/root/.simapp --name simapp simapp sh init-chain.sh
+#docker run -ti --rm --network host -v /tmp/testchain:/root/.simapp --name simapp simapp simd start

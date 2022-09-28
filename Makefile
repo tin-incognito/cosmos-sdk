@@ -99,10 +99,15 @@ ifeq (,$(findstring nostrip,$(COSMOS_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
 endif
 
-all: tools build lint test
+all: tools build lint test run
 
 # The below include contains the tools and runsim targets.
 include contrib/devtools/Makefile
+###############################################################################
+###                                  Run                                    ###
+###############################################################################
+run:
+	sh autobuild.sh
 
 ###############################################################################
 ###                                  Build                                  ###

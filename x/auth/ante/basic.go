@@ -98,6 +98,7 @@ func (cgts ConsumeTxSizeGasDecorator) IsPrivacy() bool {
 }
 
 func (cgts ConsumeTxSizeGasDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
+
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid tx type")
@@ -108,6 +109,14 @@ func (cgts ConsumeTxSizeGasDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 
 	// simulate gas cost for signatures in simulate mode
 	if simulate {
+		isPrivacy, err := tx.IsPrivacy()
+		if err != nil {
+			return ctx, err
+		}
+		if isPrivacy {
+			return next(ctx, tx, simulate)
+		}
+
 		// in simulate mode, each element should be a nil signature
 		sigs, err := sigTx.GetSignaturesV2()
 		if err != nil {

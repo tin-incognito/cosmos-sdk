@@ -77,24 +77,24 @@ func (c *Client) AllOutputCoin() ([]types.OutputCoin, error) {
 }
 
 func (c *Client) OutputCoinLength() (*types.OutputCoinLength, error) {
-	url := c.host + "/output_coin_serial_number"
+	url := c.host + "/output_coin_length"
 	body, err := c.sendRequest("GET", url)
 	if err != nil {
 		return nil, err
 	}
 	type Result struct {
-		OutputCoinSerialNumber *types.OutputCoinLength `json:"OutputCoinLength"`
+		OutputCoinLength *types.OutputCoinLength `json:"OutputCoinLength"`
 	}
 	var temp Result
 	err = json.Unmarshal(body, &temp)
 	if err != nil {
 		return nil, err
 	}
-	if temp.OutputCoinSerialNumber == nil {
-		return nil, fmt.Errorf("Cannot find output coin serialNumber")
+	if temp.OutputCoinLength == nil {
+		return nil, fmt.Errorf("Cannot find output coin length")
 	}
 
-	return temp.OutputCoinSerialNumber, nil
+	return temp.OutputCoinLength, nil
 }
 
 func (c *Client) OtaCoin(index string) (*types.OTACoin, error) {

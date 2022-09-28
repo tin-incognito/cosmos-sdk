@@ -3,6 +3,7 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	types2 "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"strings"
 
@@ -21,7 +22,7 @@ var _ = strconv.Itoa(0)
 
 func CmdTransfer() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "transfer [private_key] [payment_infos] [fee]",
+		Use:   "transfer [private_key] [payment_infos] [gasPrice]",
 		Short: "Broadcast message transfer",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -54,8 +55,12 @@ func CmdTransfer() *cobra.Command {
 				}
 				paymentInfos = append(paymentInfos, paymentInfo)
 			}
-			feeArgs := args[2]
-			fee, err := strconv.ParseUint(feeArgs, 10, 64)
+			gasPriceArgs := args[2]
+			gasPriceCoin, err := types2.ParseDecCoin(gasPriceArgs)
+			if err != nil {
+				return err
+			}
+			gasPrice := gasPriceCoin.Amount
 			if err != nil {
 				return err
 			}
@@ -80,15 +85,28 @@ func CmdTransfer() *cobra.Command {
 				return err
 			}
 
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, fee, hash)
+			//simulate
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash)
 			if err != nil {
 				return err
 			}
 
-			if err := msg.ValidateBasic(); err != nil {
+			pflag := cmd.Flags()
+			pflag.Set("gas-adjustment", fmt.Sprint(1.01))
+			txf := tx.NewFactoryForPrivacyTxCLI(clientCtx, pflag)
+			_, simGasLimit, err := tx.CalculateGas(clientCtx, txf, msg)
+
+			if err != nil {
 				return err
 			}
-			return tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash)
+			if err != nil {
+				return err
+			}
+			pflag.Set("gas", fmt.Sprint(simGasLimit))
+			pflag.Set("gas-prices", fmt.Sprintf("%v", gasPriceArgs))
+
+			return tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, pflag, msg)
 		},
 	}
 

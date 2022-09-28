@@ -1,7 +1,9 @@
 package models
 
 import (
+	"encoding/base64"
 	"math/big"
+	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
@@ -115,4 +117,18 @@ func parseDataFromProof(proof *repos.PaymentProof, outputCoinLength big.Int) (
 	}
 
 	return acceptedSerialNumbers, acceptedCommitments, acceptedOutputcoins, acceptedOTACoins, acceptedOnetimeAddresses, &outputCoinLength, nil
+}
+
+func MsgHash(lockTime uint64, fee uint64, proof *repos.PaymentProof, md []byte) common.Hash {
+	record := strconv.FormatUint(lockTime, 10)
+	record += strconv.FormatUint(fee, 10)
+	if proof != nil {
+		record += base64.StdEncoding.EncodeToString(proof.Bytes())
+	}
+	if len(md) != 0 {
+		// TODO: handle when add metadata
+		/*metadataHash := Metadata.Hash()*/
+		/*record += metadataHash.String()*/
+	}
+	return common.HashH([]byte(record))
 }

@@ -1,13 +1,11 @@
 package cli
 
 import (
-	"encoding/json"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
@@ -49,22 +47,7 @@ func CmdAirdrop() *cobra.Command {
 				return err
 			}
 
-			type Message struct {
-				PrivateKey string `json:"private_key"`
-				Amount     uint64 `json:"amount"`
-			}
-			m := Message{
-				PrivateKey: privateKey,
-				Amount:     amount,
-			}
-
-			msgBytes, err := json.Marshal(m)
-			if err != nil {
-				return err
-			}
-			hash := common.HashH(msgBytes)
-
-			msg, err := models.BuildMintTx(otaReceiver, amount, nil, nil, hash)
+			msg, err := models.BuildMintTx(otaReceiver, amount, nil, nil)
 			if err != nil {
 				return err
 			}

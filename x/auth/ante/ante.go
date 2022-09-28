@@ -4,9 +4,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante/privacy"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	privacyAnte "github.com/cosmos/cosmos-sdk/x/privacy/ante"
 )
 
 // HandlerOptions are the options required for constructing a default SDK AnteHandler.
@@ -14,6 +14,7 @@ type HandlerOptions struct {
 	AccountKeeper   AccountKeeper
 	BankKeeper      types.BankKeeper
 	FeegrantKeeper  FeegrantKeeper
+	PrivacyKeeper   privacyAnte.PrivacyKeeper
 	SignModeHandler authsigning.SignModeHandler
 	SigGasConsumer  func(meter sdk.GasMeter, sig signing.SignatureV2, params types.Params) error
 }
@@ -53,10 +54,10 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		NewSigGasConsumeDecorator(options.AccountKeeper, sigGasConsumer),
 		NewSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
 		NewIncrementSequenceDecorator(options.AccountKeeper),
-		privacy.NewMintValidateSanityDataDecorator(),
 		// Add validate double spend in mem pool later for mint tx
-		privacy.NewMintValidateByItselfDecorator(),
-		privacy.NewMintValidateByDbDecorator(),
+		privacyAnte.NewValidateSanityDecorator(),
+		privacyAnte.NewValidateByItself(),
+		privacyAnte.NewValidateByDbDecorator(options.PrivacyKeeper),
 	}
 
 	return sdk.ChainAnteDecorators(anteDecorators...), nil

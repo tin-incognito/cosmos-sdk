@@ -1,0 +1,48 @@
+package ante
+
+import (
+	"fmt"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
+	"github.com/cosmos/cosmos-sdk/x/privacy/types"
+)
+
+type ValidateByItself struct{}
+
+func NewValidateByItself() ValidateByItself {
+	return ValidateByItself{}
+}
+
+func (vbi ValidateByItself) IsPrivacy() bool {
+	return true
+}
+
+func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	//TODO: @tin validate metadata by itself
+
+	// no need to check index, has been checked before
+	msg := tx.GetMsgs()[0]
+	switch msg := msg.(type) {
+	case *types.MsgPrivacyData:
+		proof := repos.NewPaymentProof()
+		err := proof.SetBytes(msg.Proof)
+		if err != nil {
+			return ctx, err
+		}
+		// TODO: @tin add confidential asset verify later
+		isValid, err := proof.Verify()
+		if err != nil {
+			return ctx, err
+		}
+		if !isValid {
+			return ctx, fmt.Errorf("Verify proof fail")
+		}
+	default:
+		errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
+		return ctx, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
+	}
+
+	return next(ctx, tx, simulate)
+}

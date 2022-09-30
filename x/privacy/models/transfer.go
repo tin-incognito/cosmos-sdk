@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/big"
 
+	types2 "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
@@ -20,7 +22,7 @@ import (
 func BuildTransferTx(
 	keySet key.KeySet,
 	msgTransferPaymentInfos []*types.MsgTransfer_PaymentInfo,
-	feePerKb uint64, hashedMessage common.Hash,
+	gasLimit uint64, gasPrice types2.Dec, hashedMessage common.Hash,
 	clientContext client.Context, cmd *cobra.Command,
 ) (*types.MsgPrivacyData, error) {
 	var amount uint64
@@ -37,6 +39,7 @@ func BuildTransferTx(
 
 	pageReq, err := client.ReadPageRequest(cmd.Flags())
 	if err != nil {
+
 		return nil, err
 	}
 
@@ -52,7 +55,7 @@ func BuildTransferTx(
 	}
 	outcoins := outputCoins.OutputCoin
 
-	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, feePerKb, nil, clientContext, cmd)
+	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, gasLimit, gasPrice, clientContext, cmd)
 	if err != nil {
 		return nil, err
 	}

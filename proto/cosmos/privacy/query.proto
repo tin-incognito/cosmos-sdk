@@ -216,3 +216,11 @@ message QueryGetOutputCoinLengthRequest {}
 message QueryGetOutputCoinLengthResponse {
   OutputCoinLength OutputCoinLength = 1 [(gogoproto.nullable) = false];
 }
+
+message QueryEstimateFeeRequest {
+	string privacyData = 1;
+}
+
+message QueryEstimateFeeResponse {
+	string text = 1;
+}

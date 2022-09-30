@@ -279,6 +279,10 @@ func (f Factory) BuildSimTx(msgs ...sdk.Msg) ([]byte, error) {
 		return nil, err
 	}
 
+	if len(msgs) == 1 && msgs[0].IsPrivacy() {
+		return f.txConfig.TxEncoder()(txb.GetTx())
+	}
+
 	// use the first element from the list of keys in order to generate a valid
 	// pubkey that supports multiple algorithms
 
@@ -289,7 +293,6 @@ func (f Factory) BuildSimTx(msgs ...sdk.Msg) ([]byte, error) {
 		if len(infos) == 0 {
 			return nil, errors.New("cannot build signature for simulation, key infos slice is empty")
 		}
-
 		// take the first info record just for simulation purposes
 		pk = infos[0].GetPubKey()
 	}
@@ -306,7 +309,6 @@ func (f Factory) BuildSimTx(msgs ...sdk.Msg) ([]byte, error) {
 	if err := txb.SetSignatures(sig); err != nil {
 		return nil, err
 	}
-
 	return f.txConfig.TxEncoder()(txb.GetTx())
 }
 

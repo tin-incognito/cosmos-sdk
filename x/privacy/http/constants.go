@@ -1,5 +1,5 @@
 package http
 
 const (
-	Host = "http://localhost:1317/privacy/privacy"
+	Host = "http://localhost:1317/cosmos/privacy"
 )

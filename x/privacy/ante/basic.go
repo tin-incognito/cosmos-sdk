@@ -20,6 +20,15 @@ func (vbi ValidateByItself) IsPrivacy() bool {
 }
 
 func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	isPrivate, err := tx.IsPrivacy()
+	if err != nil {
+		return ctx, err
+	}
+	if !isPrivate {
+		return next(ctx, tx, simulate)
+	}
+
+	//TODO: @tin validate metadata by itself
 
 	// no need to check index, has been checked before
 	msg := tx.GetMsgs()[0]

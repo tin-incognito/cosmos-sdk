@@ -3,10 +3,11 @@ package models
 import (
 	"context"
 	"fmt"
-
+	"math"
 	"sort"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
@@ -39,8 +40,8 @@ func GenerateOutputCoinsByPaymentInfos(paymentInfos []*key.PaymentInfo) ([]*coin
 
 func chooseCoinsByKeySet(
 	coins []types.OutputCoin, keySet key.KeySet, amount uint64,
-	paymentInfos []*types.MsgTransfer_PaymentInfo, feePerKb uint64,
-	metadata []byte, clientContext client.Context, cmd *cobra.Command,
+	paymentInfos []*types.MsgTransfer_PaymentInfo, gasLimit uint64, gasPrice types2.Dec,
+	clientContext client.Context, cmd *cobra.Command,
 ) ([]*OutputCoin, []*key.PaymentInfo, uint64, error) {
 	var res, remainCoins []*OutputCoin
 	var resPaymentInfos []*key.PaymentInfo
@@ -55,13 +56,11 @@ func chooseCoinsByKeySet(
 		isConfidentialAsset := item.value.AssetTag != nil
 		hash := common.HashH(append([]byte{common.BoolToByte(isConfidentialAsset)}, serialNum...))
 		params := &types.QueryGetSerialNumberRequest{Index: hash.String()}
-		serialNumber, err := queryClient.SerialNumber(context.Background(), params)
-		if err != nil {
-			return nil, nil, 0, err
+		_, err := queryClient.SerialNumber(context.Background(), params)
+		if err == nil {
+			continue
 		}
-		if serialNumber != nil {
-			res = append(res, item)
-		}
+		res = append(res, item)
 	}
 
 	var candidateOutputCoinAmount uint64
@@ -95,7 +94,13 @@ func chooseCoinsByKeySet(
 			Amount:         overBalanceAmount,
 		})
 	}
-	fee := EstimateFee(feePerKb, len(coins), len(paymentInfos), metadata)
+
+	gasPriceN, err := gasPrice.Float64()
+	if err != nil {
+		return nil, nil, 0, err
+	}
+
+	fee := uint64(math.Ceil(gasPriceN * float64(gasLimit)))
 	needToPayFee := int64((amount + fee) - candidateOutputCoinAmount)
 	// if not enough to pay fee
 	if needToPayFee > 0 {
@@ -112,8 +117,8 @@ func chooseCoinsByKeySet(
 		lastPaymentInfo := resPaymentInfos[len(resPaymentInfos)-1]
 		if lastPaymentInfo.PaymentAddress.String() == keySet.PaymentAddress.String() {
 			temp := lastPaymentInfo.Amount - fee
-			if temp > lastPaymentInfo.Amount {
-				return nil, nil, 0, fmt.Errorf("out of range uint64")
+			if lastPaymentInfo.Amount < fee {
+				return nil, nil, 0, fmt.Errorf("Fee: %v Amount: %v", fee, lastPaymentInfo.Amount)
 			}
 			lastPaymentInfo.Amount = temp
 		}

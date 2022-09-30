@@ -55,7 +55,7 @@ func ChainAnteDecorators(chain ...AnteDecorator) AnteHandler {
 				return privacyChain[0].AnteHandle(ctx, tx, simulate, nil)
 			}
 		}
-
+		//if the decorator is not for privacy, we need to bypass inside AnteHandle
 		return chain[0].AnteHandle(ctx, tx, simulate, ChainAnteDecorators(chain[1:]...))
 	}
 }

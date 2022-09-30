@@ -86,7 +86,7 @@ func CmdTransfer() *cobra.Command {
 			}
 
 			//simulate
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash)
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash, clientCtx, cmd)
 			if err != nil {
 				return err
 			}
@@ -99,7 +99,7 @@ func CmdTransfer() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash)
+			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash, clientCtx, cmd)
 			if err != nil {
 				return err
 			}

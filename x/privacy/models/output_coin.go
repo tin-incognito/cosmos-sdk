@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
+	"math"
 	"sort"
 )
 
@@ -79,7 +80,7 @@ func chooseCoinsByKeySet(
 		return nil, nil, 0, err
 	}
 
-	fee := uint64(gasPriceN * float64(gasLimit))
+	fee := uint64(math.Ceil(gasPriceN * float64(gasLimit)))
 	needToPayFee := int64((amount + fee) - candidateOutputCoinAmount)
 	// if not enough to pay fee
 	if needToPayFee > 0 {

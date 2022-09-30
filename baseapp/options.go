@@ -2,6 +2,7 @@ package baseapp
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/privacy/mempool"
 	"io"
 
 	dbm "github.com/tendermint/tm-db"
@@ -151,6 +152,14 @@ func (app *BaseApp) SetEndBlocker(endBlocker sdk.EndBlocker) {
 	}
 
 	app.endBlocker = endBlocker
+}
+
+func (app *BaseApp) SetPrivacyMempool(mempool *mempool.PrivacyMempool) {
+	if app.sealed {
+		panic("SetPrivacyMempool() on sealed BaseApp")
+	}
+
+	app.privacyLocalMempool = mempool
 }
 
 func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {

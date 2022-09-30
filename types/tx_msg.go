@@ -48,7 +48,7 @@ type (
 		ValidateBasic() error
 
 		// If this tx has message from privacy module
-		IsPrivacy() (bool, error)
+		IsPrivacy() bool
 	}
 
 	// FeeTx defines the interface to be implemented by Tx to use the FeeDecorators

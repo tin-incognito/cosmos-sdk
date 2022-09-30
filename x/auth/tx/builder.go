@@ -30,7 +30,7 @@ type wrapper struct {
 	txBodyHasUnknownNonCriticals bool
 }
 
-func (w *wrapper) IsPrivacy() (bool, error) {
+func (w *wrapper) IsPrivacy() bool {
 	return tx.IsPrivacyTx(w.tx)
 }
 

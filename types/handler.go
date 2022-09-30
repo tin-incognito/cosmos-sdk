@@ -38,10 +38,8 @@ func ChainAnteDecorators(chain ...AnteDecorator) AnteHandler {
 	}
 
 	return func(ctx Context, tx Tx, simulate bool) (Context, error) {
-		isPrivacyTx, err := tx.IsPrivacy()
-		if err != nil {
-			return ctx, err
-		}
+		isPrivacyTx := tx.IsPrivacy()
+
 		if isPrivacyTx {
 			privacyChain := []AnteDecorator{}
 			for _, v := range chain {

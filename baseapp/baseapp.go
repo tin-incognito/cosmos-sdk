@@ -3,6 +3,7 @@ package baseapp
 import (
 	"errors"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/privacy/mempool"
 	"reflect"
 	"strings"
 
@@ -59,13 +60,14 @@ type BaseApp struct { // nolint: maligned
 	interfaceRegistry types.InterfaceRegistry
 	txDecoder         sdk.TxDecoder // unmarshal []byte into sdk.Tx
 
-	anteHandler    sdk.AnteHandler  // ante handler for fee and auth
-	initChainer    sdk.InitChainer  // initialize state with validators and state blob
-	beginBlocker   sdk.BeginBlocker // logic to run before any txs
-	endBlocker     sdk.EndBlocker   // logic to run after all txs, and to determine valset changes
-	addrPeerFilter sdk.PeerFilter   // filter peers by address and port
-	idPeerFilter   sdk.PeerFilter   // filter peers by node ID
-	fauxMerkleMode bool             // if true, IAVL MountStores uses MountStoresDB for simulation speed.
+	privacyLocalMempool *mempool.PrivacyMempool
+	anteHandler         sdk.AnteHandler  // ante handler for fee and auth
+	initChainer         sdk.InitChainer  // initialize state with validators and state blob
+	beginBlocker        sdk.BeginBlocker // logic to run before any txs
+	endBlocker          sdk.EndBlocker   // logic to run after all txs, and to determine valset changes
+	addrPeerFilter      sdk.PeerFilter   // filter peers by address and port
+	idPeerFilter        sdk.PeerFilter   // filter peers by node ID
+	fauxMerkleMode      bool             // if true, IAVL MountStores uses MountStoresDB for simulation speed.
 
 	// manages snapshots, i.e. dumps of app state at certain intervals
 	snapshotManager    *snapshots.Manager
@@ -676,6 +678,14 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 
 		if err != nil {
 			return gInfo, nil, nil, err
+		}
+
+		//check doublespend in mempool
+		if tx.IsPrivacy() {
+			if !app.privacyLocalMempool.AddToPool(tx.GetMsgs()[0]) {
+				return gInfo, nil, nil, errors.New("Doublespend in local mempool")
+			}
+
 		}
 
 		msCache.Write()

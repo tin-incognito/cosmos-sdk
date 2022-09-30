@@ -109,10 +109,7 @@ func (cgts ConsumeTxSizeGasDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 
 	// simulate gas cost for signatures in simulate mode
 	if simulate {
-		isPrivacy, err := tx.IsPrivacy()
-		if err != nil {
-			return ctx, err
-		}
+		isPrivacy := tx.IsPrivacy()
 		if isPrivacy {
 			return next(ctx, tx, simulate)
 		}

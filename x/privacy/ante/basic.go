@@ -20,10 +20,7 @@ func (vbi ValidateByItself) IsPrivacy() bool {
 }
 
 func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	isPrivate, err := tx.IsPrivacy()
-	if err != nil {
-		return ctx, err
-	}
+	isPrivate := tx.IsPrivacy()
 	if !isPrivate {
 		return next(ctx, tx, simulate)
 	}

@@ -2,7 +2,6 @@ package tx
 
 import (
 	"fmt"
-
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,25 +15,16 @@ const MaxGasWanted = uint64((1 << 63) - 1)
 var _, _, _, _ codectypes.UnpackInterfacesMessage = &Tx{}, &TxBody{}, &AuthInfo{}, &SignerInfo{}
 var _ sdk.Tx = &Tx{}
 
-func IsPrivacyTx(t *Tx) (bool, error) {
+func IsPrivacyTx(t *Tx) bool {
 	return t.IsPrivacy()
 }
 
-func (t *Tx) IsPrivacy() (bool, error) {
+func (t *Tx) IsPrivacy() bool {
 	msgs := t.GetMsgs()
-	numberMsgPrivacy := 0
-	for _, msg := range msgs {
-		if msg.IsPrivacy() {
-			numberMsgPrivacy++
-		}
+	if len(msgs) == 1 && msgs[0].IsPrivacy() {
+		return true
 	}
-	if numberMsgPrivacy == 0 {
-		return false, nil
-	}
-	if numberMsgPrivacy != len(msgs) {
-		return false, fmt.Errorf("All message must be privacy in tx privacy")
-	}
-	return true, nil
+	return false
 }
 
 // GetMsgs implements the GetMsgs method on sdk.Tx.
@@ -106,10 +96,7 @@ func (t *Tx) ValidateBasic() error {
 
 	sigs := t.Signatures
 
-	isPrivacy, err := t.IsPrivacy()
-	if err != nil {
-		return err
-	}
+	isPrivacy := t.IsPrivacy()
 
 	if len(sigs) == 0 && !isPrivacy {
 		return sdkerrors.ErrNoSignatures

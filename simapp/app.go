@@ -2,6 +2,7 @@ package simapp
 
 import (
 	"encoding/json"
+	"github.com/cosmos/cosmos-sdk/x/privacy/mempool"
 	"io"
 	"net/http"
 	"os"
@@ -288,7 +289,7 @@ func NewSimApp(
 
 	app.GovKeeper = *govKeeper.SetHooks(
 		govtypes.NewMultiGovHooks(
-		// register the governance hooks
+			// register the governance hooks
 		),
 	)
 
@@ -423,6 +424,7 @@ func NewSimApp(
 
 	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
+	app.SetPrivacyMempool(mempool.NewPrivacyMempool())
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {

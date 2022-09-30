@@ -1,14 +1,18 @@
 package models
 
 import (
+	"context"
 	"fmt"
 
 	"sort"
 
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
+	"github.com/spf13/cobra"
 )
 
 type OutputCoin struct {
@@ -36,14 +40,30 @@ func GenerateOutputCoinsByPaymentInfos(paymentInfos []*key.PaymentInfo) ([]*coin
 func chooseCoinsByKeySet(
 	coins []types.OutputCoin, keySet key.KeySet, amount uint64,
 	paymentInfos []*types.MsgTransfer_PaymentInfo, feePerKb uint64,
-	metadata []byte,
+	metadata []byte, clientContext client.Context, cmd *cobra.Command,
 ) ([]*OutputCoin, []*key.PaymentInfo, uint64, error) {
 	var res, remainCoins []*OutputCoin
 	var resPaymentInfos []*key.PaymentInfo
-	res, err := getCoinsByKeySet(coins, keySet)
+	coinsByKeySet, err := getCoinsByKeySet(coins, keySet)
 	if err != nil {
 		return nil, nil, 0, err
 	}
+
+	for _, item := range coinsByKeySet {
+		queryClient := types.NewQueryClient(clientContext)
+		serialNum := item.value.GetKeyImage().ToBytesS()
+		isConfidentialAsset := item.value.AssetTag != nil
+		hash := common.HashH(append([]byte{common.BoolToByte(isConfidentialAsset)}, serialNum...))
+		params := &types.QueryGetSerialNumberRequest{Index: hash.String()}
+		serialNumber, err := queryClient.SerialNumber(context.Background(), params)
+		if err != nil {
+			return nil, nil, 0, err
+		}
+		if serialNumber != nil {
+			res = append(res, item)
+		}
+	}
+
 	var candidateOutputCoinAmount uint64
 	res, remainCoins, candidateOutputCoinAmount, err = chooseBestOutCoinsToSpent(res, amount)
 	if err != nil {

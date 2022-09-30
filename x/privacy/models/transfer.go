@@ -52,7 +52,7 @@ func BuildTransferTx(
 	}
 	outcoins := outputCoins.OutputCoin
 
-	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, feePerKb, nil)
+	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, feePerKb, nil, clientContext, cmd)
 	if err != nil {
 		return nil, err
 	}

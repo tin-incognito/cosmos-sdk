@@ -4,9 +4,9 @@ package cosmos.privacy.privacy;
 option go_package = "x/privacy/types";
 
 message OutputCoin {
-  string index = 1; 
-  bytes serial_number = 2;
-  bool is_confidential_asset = 3;
-  bytes pub_key = 4;
-  bytes value = 5;
+  string index                 = 1;
+  bytes  serial_number         = 2;
+  bool   is_confidential_asset = 3;
+  bytes  pub_key               = 4;
+  bytes  value                 = 5;
 }

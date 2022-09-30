@@ -4,7 +4,7 @@ package cosmos.privacy.privacy;
 option go_package = "x/privacy/types";
 
 message OTACoin {
-  string index = 1; 
+  string index             = 1;
   string output_coin_index = 2;
-  bytes height = 3;
+  bytes  height            = 3;
 }

@@ -1,11 +1,12 @@
 package models
 
 import (
+	"context"
 	"fmt"
 	"math/big"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
-	"github.com/cosmos/cosmos-sdk/x/privacy/http"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/bulletproofs"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
@@ -13,12 +14,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/mlsag"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/operation"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
+	"github.com/spf13/cobra"
 )
 
 func BuildTransferTx(
 	keySet key.KeySet,
 	msgTransferPaymentInfos []*types.MsgTransfer_PaymentInfo,
 	feePerKb uint64, hashedMessage common.Hash,
+	clientContext client.Context, cmd *cobra.Command,
 ) (*types.MsgPrivacyData, error) {
 	var amount uint64
 	var err error
@@ -29,29 +32,44 @@ func BuildTransferTx(
 		}
 	}
 
-	httpClient := http.NewClient()
-	outcoins, err := httpClient.AllOutputCoin()
+	/*flags.AddPaginationFlagsToCmd(cmd, cmd.Use)*/
+	/*flags.AddQueryFlagsToCmd(cmd)*/
+
+	pageReq, err := client.ReadPageRequest(cmd.Flags())
 	if err != nil {
 		return nil, err
 	}
+
+	queryClient := types.NewQueryClient(clientContext)
+
+	params := &types.QueryAllOutputCoinRequest{
+		Pagination: pageReq,
+	}
+
+	outputCoins, err := queryClient.OutputCoinAll(context.Background(), params)
+	if err != nil {
+		return nil, err
+	}
+	outcoins := outputCoins.OutputCoin
 
 	coins, paymentInfos, fee, err := chooseCoinsByKeySet(outcoins, keySet, amount, msgTransferPaymentInfos, feePerKb, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage)
+	return buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd)
 }
 
 func buildTransferTx(
 	inputCoins []*OutputCoin, keySet key.KeySet, paymentInfos []*key.PaymentInfo, fee uint64, hashedMessage common.Hash,
+	clientContext client.Context, cmd *cobra.Command,
 ) (*types.MsgPrivacyData, error) {
 	proof, outputCoins, err := Prove(inputCoins, paymentInfos)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := SignOnMessage(inputCoins, outputCoins, &keySet.PrivateKey, hashedMessage.Bytes(), fee)
+	res, err := SignOnMessage(inputCoins, outputCoins, &keySet.PrivateKey, hashedMessage.Bytes(), fee, clientContext, cmd)
 	if err != nil {
 		return nil, err
 	}
@@ -180,6 +198,7 @@ func prove(
 func SignOnMessage(
 	inputCoins []*OutputCoin, outputCoins []*coin.Coin,
 	privateKey *key.PrivateKey, hashedMessage []byte, fee uint64,
+	clientContext client.Context, cmd *cobra.Command,
 ) (*types.MsgPrivacyData, error) {
 	tx := new(types.MsgPrivacyData)
 	// Generate Ring
@@ -188,7 +207,7 @@ func SignOnMessage(
 		return nil, err
 	}
 	var pi int = int(piBig.Int64())
-	ring, indexes, commitmentToZero, err := generateMlsagRingWithIndexes(inputCoins, outputCoins, pi, fee)
+	ring, indexes, commitmentToZero, err := generateMlsagRingWithIndexes(inputCoins, outputCoins, pi, fee, clientContext, cmd)
 	if err != nil {
 		return nil, err
 	}
@@ -223,6 +242,7 @@ func SignOnMessage(
 
 func generateMlsagRingWithIndexes(
 	inputCoins []*OutputCoin, outputCoins []*coin.Coin, pi int, fee uint64,
+	clientContext client.Context, cmd *cobra.Command,
 ) (*mlsag.Ring, [][]*big.Int, *operation.Point, error) {
 	outputCoinsAsGeneric := make([]*coin.Coin, len(outputCoins))
 	for i := 0; i < len(outputCoins); i++ {
@@ -234,24 +254,52 @@ func generateMlsagRingWithIndexes(
 	var commitmentToZero *operation.Point
 	attempts := 0
 
-	httpClient := http.NewClient()
-	outputCoinLength, err := httpClient.OutputCoinLength()
+	queryClient := types.NewQueryClient(clientContext)
+
+	params := &types.QueryGetOutputCoinLengthRequest{}
+
+	outputCoinLength, err := queryClient.OutputCoinLength(context.Background(), params)
 	if err != nil {
 		return nil, nil, nil, err
 	}
-	otaCoinsLength := big.NewInt(0).SetBytes(outputCoinLength.Value)
-	allOutputCoins, err := httpClient.AllOutputCoin()
+
+	otaCoinsLength := big.NewInt(0).SetBytes(outputCoinLength.OutputCoinLength.Value)
+	pageReq, err := client.ReadPageRequest(cmd.Flags())
 	if err != nil {
 		return nil, nil, nil, err
 	}
+
+	queryClient = types.NewQueryClient(clientContext)
+	p0 := &types.QueryAllOutputCoinRequest{
+		Pagination: pageReq,
+	}
+
+	tempOutputCoins, err := queryClient.OutputCoinAll(context.Background(), p0)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	allOutputCoins := tempOutputCoins.OutputCoin
+
 	mOutputCoins := make(map[string]types.OutputCoin)
 	for _, v := range allOutputCoins {
 		mOutputCoins[v.Index] = v
 	}
-	otaCoins, err := httpClient.AllOtaCoins()
+
+	pageReq, err = client.ReadPageRequest(cmd.Flags())
 	if err != nil {
 		return nil, nil, nil, err
 	}
+
+	queryClient = types.NewQueryClient(clientContext)
+	p1 := &types.QueryAllOTACoinRequest{
+		Pagination: pageReq,
+	}
+
+	tempOTACoins, err := queryClient.OTACoinAll(context.Background(), p1)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	otaCoins := tempOTACoins.OTACoin
 	mOtaCoins := make(map[string]types.OTACoin)
 	for _, v := range otaCoins {
 		mOtaCoins[v.Index] = v

@@ -15,12 +15,12 @@ option go_package = "x/privacy/types";
 
 // GenesisState defines the privacy module's genesis state.
 message GenesisState {
-  Params params = 1 [(gogoproto.nullable) = false];
-  repeated SerialNumber serialNumberList = 2 [(gogoproto.nullable) = false];
-  repeated OutputCoin outputCoinList = 3 [(gogoproto.nullable) = false];
-  repeated Commitment commitmentList = 4 [(gogoproto.nullable) = false];
-  repeated Token tokenList = 5 [(gogoproto.nullable) = false];
+  Params                  params             = 1 [(gogoproto.nullable) = false];
+  repeated SerialNumber   serialNumberList   = 2 [(gogoproto.nullable) = false];
+  repeated OutputCoin     outputCoinList     = 3 [(gogoproto.nullable) = false];
+  repeated Commitment     commitmentList     = 4 [(gogoproto.nullable) = false];
+  repeated Token          tokenList          = 5 [(gogoproto.nullable) = false];
   repeated OnetimeAddress onetimeAddressList = 6 [(gogoproto.nullable) = false];
-  repeated OTACoin oTACoinList = 7 [(gogoproto.nullable) = false];
-  OutputCoinLength outputCoinLength = 8;
+  repeated OTACoin        oTACoinList        = 7 [(gogoproto.nullable) = false];
+  OutputCoinLength        outputCoinLength   = 8;
 }

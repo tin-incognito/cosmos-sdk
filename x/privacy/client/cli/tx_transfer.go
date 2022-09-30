@@ -80,7 +80,7 @@ func CmdTransfer() *cobra.Command {
 				return err
 			}
 
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, fee, hash)
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, fee, hash, clientCtx, cmd)
 			if err != nil {
 				return err
 			}

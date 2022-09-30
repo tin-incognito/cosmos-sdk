@@ -419,6 +419,76 @@
   
     - [Query](#cosmos.params.v1beta1.Query)
   
+- [cosmos/privacy/commitment.proto](#cosmos/privacy/commitment.proto)
+    - [Commitment](#cosmos.privacy.privacy.Commitment)
+  
+- [cosmos/privacy/serial_number.proto](#cosmos/privacy/serial_number.proto)
+    - [SerialNumber](#cosmos.privacy.privacy.SerialNumber)
+  
+- [cosmos/privacy/params.proto](#cosmos/privacy/params.proto)
+    - [Params](#cosmos.privacy.privacy.Params)
+  
+- [cosmos/privacy/output_coin.proto](#cosmos/privacy/output_coin.proto)
+    - [OutputCoin](#cosmos.privacy.privacy.OutputCoin)
+  
+- [cosmos/privacy/token.proto](#cosmos/privacy/token.proto)
+    - [Token](#cosmos.privacy.privacy.Token)
+  
+- [cosmos/privacy/onetime_address.proto](#cosmos/privacy/onetime_address.proto)
+    - [OnetimeAddress](#cosmos.privacy.privacy.OnetimeAddress)
+  
+- [cosmos/privacy/ota_coin.proto](#cosmos/privacy/ota_coin.proto)
+    - [OTACoin](#cosmos.privacy.privacy.OTACoin)
+  
+- [cosmos/privacy/output_coin_length.proto](#cosmos/privacy/output_coin_length.proto)
+    - [OutputCoinLength](#cosmos.privacy.privacy.OutputCoinLength)
+  
+- [cosmos/privacy/genesis.proto](#cosmos/privacy/genesis.proto)
+    - [GenesisState](#cosmos.privacy.privacy.GenesisState)
+  
+- [cosmos/privacy/query.proto](#cosmos/privacy/query.proto)
+    - [QueryAllCommitmentRequest](#cosmos.privacy.privacy.QueryAllCommitmentRequest)
+    - [QueryAllCommitmentResponse](#cosmos.privacy.privacy.QueryAllCommitmentResponse)
+    - [QueryAllOTACoinRequest](#cosmos.privacy.privacy.QueryAllOTACoinRequest)
+    - [QueryAllOTACoinResponse](#cosmos.privacy.privacy.QueryAllOTACoinResponse)
+    - [QueryAllOnetimeAddressRequest](#cosmos.privacy.privacy.QueryAllOnetimeAddressRequest)
+    - [QueryAllOnetimeAddressResponse](#cosmos.privacy.privacy.QueryAllOnetimeAddressResponse)
+    - [QueryAllOutputCoinRequest](#cosmos.privacy.privacy.QueryAllOutputCoinRequest)
+    - [QueryAllOutputCoinResponse](#cosmos.privacy.privacy.QueryAllOutputCoinResponse)
+    - [QueryAllSerialNumberRequest](#cosmos.privacy.privacy.QueryAllSerialNumberRequest)
+    - [QueryAllSerialNumberResponse](#cosmos.privacy.privacy.QueryAllSerialNumberResponse)
+    - [QueryAllTokenRequest](#cosmos.privacy.privacy.QueryAllTokenRequest)
+    - [QueryAllTokenResponse](#cosmos.privacy.privacy.QueryAllTokenResponse)
+    - [QueryBalanceRequest](#cosmos.privacy.privacy.QueryBalanceRequest)
+    - [QueryBalanceResponse](#cosmos.privacy.privacy.QueryBalanceResponse)
+    - [QueryGetCommitmentRequest](#cosmos.privacy.privacy.QueryGetCommitmentRequest)
+    - [QueryGetCommitmentResponse](#cosmos.privacy.privacy.QueryGetCommitmentResponse)
+    - [QueryGetOTACoinRequest](#cosmos.privacy.privacy.QueryGetOTACoinRequest)
+    - [QueryGetOTACoinResponse](#cosmos.privacy.privacy.QueryGetOTACoinResponse)
+    - [QueryGetOnetimeAddressRequest](#cosmos.privacy.privacy.QueryGetOnetimeAddressRequest)
+    - [QueryGetOnetimeAddressResponse](#cosmos.privacy.privacy.QueryGetOnetimeAddressResponse)
+    - [QueryGetOutputCoinLengthRequest](#cosmos.privacy.privacy.QueryGetOutputCoinLengthRequest)
+    - [QueryGetOutputCoinLengthResponse](#cosmos.privacy.privacy.QueryGetOutputCoinLengthResponse)
+    - [QueryGetOutputCoinRequest](#cosmos.privacy.privacy.QueryGetOutputCoinRequest)
+    - [QueryGetOutputCoinResponse](#cosmos.privacy.privacy.QueryGetOutputCoinResponse)
+    - [QueryGetSerialNumberRequest](#cosmos.privacy.privacy.QueryGetSerialNumberRequest)
+    - [QueryGetSerialNumberResponse](#cosmos.privacy.privacy.QueryGetSerialNumberResponse)
+    - [QueryGetTokenRequest](#cosmos.privacy.privacy.QueryGetTokenRequest)
+    - [QueryGetTokenResponse](#cosmos.privacy.privacy.QueryGetTokenResponse)
+    - [QueryParamsRequest](#cosmos.privacy.privacy.QueryParamsRequest)
+    - [QueryParamsResponse](#cosmos.privacy.privacy.QueryParamsResponse)
+  
+    - [Query](#cosmos.privacy.privacy.Query)
+  
+- [cosmos/privacy/tx.proto](#cosmos/privacy/tx.proto)
+    - [MsgPrivacyData](#cosmos.privacy.privacy.MsgPrivacyData)
+    - [MsgPrivacyDataResponse](#cosmos.privacy.privacy.MsgPrivacyDataResponse)
+    - [MsgTransfer](#cosmos.privacy.privacy.MsgTransfer)
+    - [MsgTransfer.PaymentInfo](#cosmos.privacy.privacy.MsgTransfer.PaymentInfo)
+    - [MsgTransferResponse](#cosmos.privacy.privacy.MsgTransferResponse)
+  
+    - [Msg](#cosmos.privacy.privacy.Msg)
+  
 - [cosmos/slashing/v1beta1/slashing.proto](#cosmos/slashing/v1beta1/slashing.proto)
     - [Params](#cosmos.slashing.v1beta1.Params)
     - [ValidatorSigningInfo](#cosmos.slashing.v1beta1.ValidatorSigningInfo)
@@ -6024,6 +6094,901 @@ Query defines the gRPC querier service.
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `Params` | [QueryParamsRequest](#cosmos.params.v1beta1.QueryParamsRequest) | [QueryParamsResponse](#cosmos.params.v1beta1.QueryParamsResponse) | Params queries a specific parameter of a module, given its subspace and key. | GET|/cosmos/params/v1beta1/params|
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/commitment.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/commitment.proto
+
+
+
+<a name="cosmos.privacy.privacy.Commitment"></a>
+
+### Commitment
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `creator` | [string](#string) |  |  |
+| `is_confidential_asset` | [bool](#bool) |  |  |
+| `value` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/serial_number.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/serial_number.proto
+
+
+
+<a name="cosmos.privacy.privacy.SerialNumber"></a>
+
+### SerialNumber
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `is_confidential_asset` | [bool](#bool) |  |  |
+| `value` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/params.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/params.proto
+
+
+
+<a name="cosmos.privacy.privacy.Params"></a>
+
+### Params
+Params defines the parameters for the module.
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/output_coin.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/output_coin.proto
+
+
+
+<a name="cosmos.privacy.privacy.OutputCoin"></a>
+
+### OutputCoin
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `serial_number` | [bytes](#bytes) |  |  |
+| `is_confidential_asset` | [bool](#bool) |  |  |
+| `pub_key` | [bytes](#bytes) |  |  |
+| `value` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/token.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/token.proto
+
+
+
+<a name="cosmos.privacy.privacy.Token"></a>
+
+### Token
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `creator` | [string](#string) |  |  |
+| `name` | [string](#string) |  |  |
+| `symbol` | [string](#string) |  |  |
+| `amount` | [uint64](#uint64) |  |  |
+| `token_id` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/onetime_address.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/onetime_address.proto
+
+
+
+<a name="cosmos.privacy.privacy.OnetimeAddress"></a>
+
+### OnetimeAddress
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `is_confidential_asset` | [bool](#bool) |  |  |
+| `public_key` | [bytes](#bytes) |  |  |
+| `i` | [bytes](#bytes) |  |  |
+| `status` | [int32](#int32) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/ota_coin.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/ota_coin.proto
+
+
+
+<a name="cosmos.privacy.privacy.OTACoin"></a>
+
+### OTACoin
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+| `output_coin_index` | [string](#string) |  |  |
+| `height` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/output_coin_length.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/output_coin_length.proto
+
+
+
+<a name="cosmos.privacy.privacy.OutputCoinLength"></a>
+
+### OutputCoinLength
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `value` | [bytes](#bytes) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/genesis.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/genesis.proto
+
+
+
+<a name="cosmos.privacy.privacy.GenesisState"></a>
+
+### GenesisState
+GenesisState defines the privacy module's genesis state.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `params` | [Params](#cosmos.privacy.privacy.Params) |  |  |
+| `serialNumberList` | [SerialNumber](#cosmos.privacy.privacy.SerialNumber) | repeated |  |
+| `outputCoinList` | [OutputCoin](#cosmos.privacy.privacy.OutputCoin) | repeated |  |
+| `commitmentList` | [Commitment](#cosmos.privacy.privacy.Commitment) | repeated |  |
+| `tokenList` | [Token](#cosmos.privacy.privacy.Token) | repeated |  |
+| `onetimeAddressList` | [OnetimeAddress](#cosmos.privacy.privacy.OnetimeAddress) | repeated |  |
+| `oTACoinList` | [OTACoin](#cosmos.privacy.privacy.OTACoin) | repeated |  |
+| `outputCoinLength` | [OutputCoinLength](#cosmos.privacy.privacy.OutputCoinLength) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/query.proto
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllCommitmentRequest"></a>
+
+### QueryAllCommitmentRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllCommitmentResponse"></a>
+
+### QueryAllCommitmentResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `commitment` | [Commitment](#cosmos.privacy.privacy.Commitment) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOTACoinRequest"></a>
+
+### QueryAllOTACoinRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOTACoinResponse"></a>
+
+### QueryAllOTACoinResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `oTACoin` | [OTACoin](#cosmos.privacy.privacy.OTACoin) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOnetimeAddressRequest"></a>
+
+### QueryAllOnetimeAddressRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOnetimeAddressResponse"></a>
+
+### QueryAllOnetimeAddressResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `onetimeAddress` | [OnetimeAddress](#cosmos.privacy.privacy.OnetimeAddress) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOutputCoinRequest"></a>
+
+### QueryAllOutputCoinRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllOutputCoinResponse"></a>
+
+### QueryAllOutputCoinResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `outputCoin` | [OutputCoin](#cosmos.privacy.privacy.OutputCoin) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllSerialNumberRequest"></a>
+
+### QueryAllSerialNumberRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllSerialNumberResponse"></a>
+
+### QueryAllSerialNumberResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `serialNumber` | [SerialNumber](#cosmos.privacy.privacy.SerialNumber) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllTokenRequest"></a>
+
+### QueryAllTokenRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryAllTokenResponse"></a>
+
+### QueryAllTokenResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `token` | [Token](#cosmos.privacy.privacy.Token) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryBalanceRequest"></a>
+
+### QueryBalanceRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `privateKey` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryBalanceResponse"></a>
+
+### QueryBalanceResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `value` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetCommitmentRequest"></a>
+
+### QueryGetCommitmentRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetCommitmentResponse"></a>
+
+### QueryGetCommitmentResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `commitment` | [Commitment](#cosmos.privacy.privacy.Commitment) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOTACoinRequest"></a>
+
+### QueryGetOTACoinRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOTACoinResponse"></a>
+
+### QueryGetOTACoinResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `oTACoin` | [OTACoin](#cosmos.privacy.privacy.OTACoin) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOnetimeAddressRequest"></a>
+
+### QueryGetOnetimeAddressRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOnetimeAddressResponse"></a>
+
+### QueryGetOnetimeAddressResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `onetimeAddress` | [OnetimeAddress](#cosmos.privacy.privacy.OnetimeAddress) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOutputCoinLengthRequest"></a>
+
+### QueryGetOutputCoinLengthRequest
+
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOutputCoinLengthResponse"></a>
+
+### QueryGetOutputCoinLengthResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `OutputCoinLength` | [OutputCoinLength](#cosmos.privacy.privacy.OutputCoinLength) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOutputCoinRequest"></a>
+
+### QueryGetOutputCoinRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetOutputCoinResponse"></a>
+
+### QueryGetOutputCoinResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `outputCoin` | [OutputCoin](#cosmos.privacy.privacy.OutputCoin) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetSerialNumberRequest"></a>
+
+### QueryGetSerialNumberRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetSerialNumberResponse"></a>
+
+### QueryGetSerialNumberResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `serialNumber` | [SerialNumber](#cosmos.privacy.privacy.SerialNumber) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetTokenRequest"></a>
+
+### QueryGetTokenRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `index` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryGetTokenResponse"></a>
+
+### QueryGetTokenResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `token` | [Token](#cosmos.privacy.privacy.Token) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryParamsRequest"></a>
+
+### QueryParamsRequest
+QueryParamsRequest is request type for the Query/Params RPC method.
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.QueryParamsResponse"></a>
+
+### QueryParamsResponse
+QueryParamsResponse is response type for the Query/Params RPC method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `params` | [Params](#cosmos.privacy.privacy.Params) |  | params holds all the parameters of this module. |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="cosmos.privacy.privacy.Query"></a>
+
+### Query
+Query defines the gRPC querier service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `Params` | [QueryParamsRequest](#cosmos.privacy.privacy.QueryParamsRequest) | [QueryParamsResponse](#cosmos.privacy.privacy.QueryParamsResponse) | Parameters queries the parameters of the module. | GET|/cosmos/privacy/params|
+| `SerialNumber` | [QueryGetSerialNumberRequest](#cosmos.privacy.privacy.QueryGetSerialNumberRequest) | [QueryGetSerialNumberResponse](#cosmos.privacy.privacy.QueryGetSerialNumberResponse) | Queries a SerialNumber by index. | GET|/cosmos/privacy/serial_number/{index}|
+| `SerialNumberAll` | [QueryAllSerialNumberRequest](#cosmos.privacy.privacy.QueryAllSerialNumberRequest) | [QueryAllSerialNumberResponse](#cosmos.privacy.privacy.QueryAllSerialNumberResponse) | Queries a list of SerialNumber items. | GET|/cosmos/privacy/serial_number|
+| `OutputCoin` | [QueryGetOutputCoinRequest](#cosmos.privacy.privacy.QueryGetOutputCoinRequest) | [QueryGetOutputCoinResponse](#cosmos.privacy.privacy.QueryGetOutputCoinResponse) | Queries a OutputCoin by index. | GET|/cosmos/privacy/output_coin/{index}|
+| `OutputCoinAll` | [QueryAllOutputCoinRequest](#cosmos.privacy.privacy.QueryAllOutputCoinRequest) | [QueryAllOutputCoinResponse](#cosmos.privacy.privacy.QueryAllOutputCoinResponse) | Queries a list of OutputCoin items. | GET|/cosmos/privacy/output_coin|
+| `Commitment` | [QueryGetCommitmentRequest](#cosmos.privacy.privacy.QueryGetCommitmentRequest) | [QueryGetCommitmentResponse](#cosmos.privacy.privacy.QueryGetCommitmentResponse) | Queries a Commitment by index. | GET|/cosmos/privacy/commitment/{index}|
+| `CommitmentAll` | [QueryAllCommitmentRequest](#cosmos.privacy.privacy.QueryAllCommitmentRequest) | [QueryAllCommitmentResponse](#cosmos.privacy.privacy.QueryAllCommitmentResponse) | Queries a list of Commitment items. | GET|/cosmos/privacy/commitment|
+| `Token` | [QueryGetTokenRequest](#cosmos.privacy.privacy.QueryGetTokenRequest) | [QueryGetTokenResponse](#cosmos.privacy.privacy.QueryGetTokenResponse) | Queries a Token by index. | GET|/cosmos/privacy/token/{index}|
+| `TokenAll` | [QueryAllTokenRequest](#cosmos.privacy.privacy.QueryAllTokenRequest) | [QueryAllTokenResponse](#cosmos.privacy.privacy.QueryAllTokenResponse) | Queries a list of Token items. | GET|/cosmos/privacy/token|
+| `OnetimeAddress` | [QueryGetOnetimeAddressRequest](#cosmos.privacy.privacy.QueryGetOnetimeAddressRequest) | [QueryGetOnetimeAddressResponse](#cosmos.privacy.privacy.QueryGetOnetimeAddressResponse) | Queries a OnetimeAddress by index. | GET|/cosmos/privacy/onetime_address/{index}|
+| `OnetimeAddressAll` | [QueryAllOnetimeAddressRequest](#cosmos.privacy.privacy.QueryAllOnetimeAddressRequest) | [QueryAllOnetimeAddressResponse](#cosmos.privacy.privacy.QueryAllOnetimeAddressResponse) | Queries a list of OnetimeAddress items. | GET|/cosmos/privacy/onetime_address|
+| `Balance` | [QueryBalanceRequest](#cosmos.privacy.privacy.QueryBalanceRequest) | [QueryBalanceResponse](#cosmos.privacy.privacy.QueryBalanceResponse) | Queries a list of Balance items. | GET|/cosmos/privacy/balance/{privateKey}|
+| `OTACoin` | [QueryGetOTACoinRequest](#cosmos.privacy.privacy.QueryGetOTACoinRequest) | [QueryGetOTACoinResponse](#cosmos.privacy.privacy.QueryGetOTACoinResponse) | Queries a OTACoin by index. | GET|/cosmos/privacy/ota_coin/{index}|
+| `OTACoinAll` | [QueryAllOTACoinRequest](#cosmos.privacy.privacy.QueryAllOTACoinRequest) | [QueryAllOTACoinResponse](#cosmos.privacy.privacy.QueryAllOTACoinResponse) | Queries a list of OTACoin items. | GET|/cosmos/privacy/ota_coin|
+| `OutputCoinLength` | [QueryGetOutputCoinLengthRequest](#cosmos.privacy.privacy.QueryGetOutputCoinLengthRequest) | [QueryGetOutputCoinLengthResponse](#cosmos.privacy.privacy.QueryGetOutputCoinLengthResponse) | Queries a OutputCoinLength by index. | GET|/cosmos/privacy/output_coin_length|
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/privacy/tx.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/privacy/tx.proto
+
+
+
+<a name="cosmos.privacy.privacy.MsgPrivacyData"></a>
+
+### MsgPrivacyData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `lock_time` | [uint64](#uint64) |  |  |
+| `fee` | [uint64](#uint64) |  |  |
+| `info` | [bytes](#bytes) |  |  |
+| `sig_pub_key` | [bytes](#bytes) |  |  |
+| `sig` | [bytes](#bytes) |  |  |
+| `proof` | [bytes](#bytes) |  |  |
+| `tx_type` | [int32](#int32) |  |  |
+| `metadata` | [bytes](#bytes) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgPrivacyDataResponse"></a>
+
+### MsgPrivacyDataResponse
+
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgTransfer"></a>
+
+### MsgTransfer
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `creator` | [string](#string) |  |  |
+| `private_key` | [string](#string) |  |  |
+| `payment_infos` | [MsgTransfer.PaymentInfo](#cosmos.privacy.privacy.MsgTransfer.PaymentInfo) | repeated |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgTransfer.PaymentInfo"></a>
+
+### MsgTransfer.PaymentInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `payment_address` | [string](#string) |  |  |
+| `amount` | [uint64](#uint64) |  |  |
+| `info` | [bytes](#bytes) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgTransferResponse"></a>
+
+### MsgTransferResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `msg` | [string](#string) |  |  |
+| `is_error` | [bool](#bool) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="cosmos.privacy.privacy.Msg"></a>
+
+### Msg
+Msg defines the Msg service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `PrivacyData` | [MsgPrivacyData](#cosmos.privacy.privacy.MsgPrivacyData) | [MsgPrivacyDataResponse](#cosmos.privacy.privacy.MsgPrivacyDataResponse) |  | |
 
  <!-- end services -->
 

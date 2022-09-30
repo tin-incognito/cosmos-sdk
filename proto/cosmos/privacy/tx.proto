@@ -9,31 +9,30 @@ service Msg {
 }
 
 message MsgPrivacyData {
-  uint64 lock_time = 1;
-  uint64 fee = 2;
-  bytes info = 3;
-  bytes sig_pub_key = 4;
-  bytes sig = 5;
-  bytes proof = 6;
-  int32 tx_type = 7;
-  bytes metadata = 8;
+  uint64 lock_time   = 1;
+  uint64 fee         = 2;
+  bytes  info        = 3;
+  bytes  sig_pub_key = 4;
+  bytes  sig         = 5;
+  bytes  proof       = 6;
+  int32  tx_type     = 7;
+  bytes  metadata    = 8;
 }
 
-message MsgPrivacyDataResponse {
-}
+message MsgPrivacyDataResponse {}
 
 message MsgTransfer {
-  string creator = 1;
-  string private_key = 2;
+  string  creator     = 1;
+  string  private_key = 2;
   message PaymentInfo {
     string payment_address = 1;
-    uint64 amount = 2;
-    bytes info = 3;
+    uint64 amount          = 2;
+    bytes  info            = 3;
   }
   repeated PaymentInfo payment_infos = 3;
 }
 
 message MsgTransferResponse {
-  string msg = 1;
-  bool is_error = 2;
+  string msg      = 1;
+  bool   is_error = 2;
 }

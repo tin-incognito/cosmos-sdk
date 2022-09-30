@@ -77,7 +77,7 @@ func (c *Client) AllOutputCoin() ([]types.OutputCoin, error) {
 }
 
 func (c *Client) OutputCoinLength() (*types.OutputCoinLength, error) {
-	url := c.host + "/output_coin_serial_number"
+	url := c.host + "/output_coin_length"
 	body, err := c.sendRequest("GET", url)
 	if err != nil {
 		return nil, err

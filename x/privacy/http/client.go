@@ -83,18 +83,18 @@ func (c *Client) OutputCoinLength() (*types.OutputCoinLength, error) {
 		return nil, err
 	}
 	type Result struct {
-		OutputCoinSerialNumber *types.OutputCoinLength `json:"OutputCoinLength"`
+		OutputCoinLength *types.OutputCoinLength `json:"OutputCoinLength"`
 	}
 	var temp Result
 	err = json.Unmarshal(body, &temp)
 	if err != nil {
 		return nil, err
 	}
-	if temp.OutputCoinSerialNumber == nil {
-		return nil, fmt.Errorf("Cannot find output coin serialNumber")
+	if temp.OutputCoinLength == nil {
+		return nil, fmt.Errorf("Cannot find output coin length")
 	}
 
-	return temp.OutputCoinSerialNumber, nil
+	return temp.OutputCoinLength, nil
 }
 
 func (c *Client) OtaCoin(index string) (*types.OTACoin, error) {

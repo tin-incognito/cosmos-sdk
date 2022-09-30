@@ -99,10 +99,15 @@ ifeq (,$(findstring nostrip,$(COSMOS_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
 endif
 
-all: tools build lint test
+all: tools build lint test run
 
 # The below include contains the tools and runsim targets.
 include contrib/devtools/Makefile
+###############################################################################
+###                                  Run                                    ###
+###############################################################################
+run:
+	sh autobuild.sh
 
 ###############################################################################
 ###                                  Build                                  ###
@@ -115,7 +120,7 @@ build-linux:
 	GOOS=linux GOARCH=$(if $(findstring aarch64,$(shell uname -m)) || $(findstring arm64,$(shell uname -m)),arm64,amd64) LEDGER_ENABLED=false $(MAKE) build
 
 $(BUILD_TARGETS): go.sum $(BUILDDIR)/
-	go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./...
+	GOARCH=amd64 go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./...
 
 $(BUILDDIR)/:
 	mkdir -p $(BUILDDIR)/

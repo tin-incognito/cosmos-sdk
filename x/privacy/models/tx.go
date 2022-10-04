@@ -12,7 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
 
-func FetchDataFromTx(ctx sdk.Context, data *types.MsgPrivacyData, outputCoinLength big.Int) (
+func FetchDataFromTx(ctx sdk.Context, proofB []byte, outputCoinLength big.Int) (
 	[]types.SerialNumber,
 	map[string][]types.Commitment,
 	map[string][]types.OutputCoin,
@@ -22,7 +22,7 @@ func FetchDataFromTx(ctx sdk.Context, data *types.MsgPrivacyData, outputCoinLeng
 	error,
 ) {
 	proof := repos.NewPaymentProof()
-	err := proof.SetBytes(data.Proof)
+	err := proof.SetBytes(proofB)
 	if err != nil {
 		ctx.Logger().Error("[incognito] fail to unmarshal by protobuf proof:")
 		ctx.Logger().Error(err.Error())

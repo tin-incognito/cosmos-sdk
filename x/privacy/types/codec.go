@@ -9,11 +9,13 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgPrivacyData{}, "privacy/PrivacyData", nil)
+	cdc.RegisterConcrete(&MsgShield{}, "privacy/ShieldCoin", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgPrivacyData{},
+		&MsgShield{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

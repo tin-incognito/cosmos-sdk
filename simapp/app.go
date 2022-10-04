@@ -301,6 +301,7 @@ func NewSimApp(
 
 	// custom module
 	app.PrivacyKeeper = *privacyKeeper.NewKeeper(
+		app.BankKeeper,
 		appCodec,
 		keys[privacyTypes.StoreKey],
 		keys[privacyTypes.MemStoreKey],

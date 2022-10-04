@@ -14,7 +14,7 @@ func (k msgServer) PrivacyData(goCtx context.Context, msg *types.MsgPrivacyData)
 
 	}
 
-	err := k.setPrivacyData(ctx, msg)
+	err := k.setPrivacyData(ctx, msg.Proof)
 	if err != nil {
 		return nil, err
 	}

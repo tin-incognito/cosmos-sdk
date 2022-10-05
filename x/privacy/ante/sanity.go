@@ -72,7 +72,7 @@ func validateSanity(msg sdk.Msg) (bool, error) {
 		}
 
 		switch msg.TxType {
-		case models.TxMintType, models.TxTransferType: // is valid
+		case models.TxMintType, models.TxTransferType, models.TxUnshieldType: // is valid
 		default:
 			return false, fmt.Errorf("wrong tx type with %v", msg.TxType)
 		}

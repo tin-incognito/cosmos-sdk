@@ -31,7 +31,6 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 		return next(ctx, tx, simulate)
 	}
 
-
 	// no need to check index, has been checked before
 	msg := tx.GetMsgs()[0]
 	switch msg := msg.(type) {
@@ -51,8 +50,8 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 				isConfidentialAsset := item.AssetTag != nil
 				serialNum := item.GetKeyImage().ToBytesS()
 				hash := common.HashH(append([]byte{common.BoolToByte(isConfidentialAsset)}, serialNum...))
-				fmt.Println("vbdd:", vbdd)
-				fmt.Println("vbdd.pk:", vbdd.pk)
+				//fmt.Println("vbdd:", vbdd)
+				//fmt.Println("vbdd.pk:", vbdd.pk)
 				if _, found := vbdd.pk.GetSerialNumber(ctx, hash.String()); found {
 					return ctx, fmt.Errorf("Duplicate serialNumber %s", item.GetKeyImage().String())
 				}

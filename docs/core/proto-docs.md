@@ -488,6 +488,7 @@
     - [MsgTransfer](#cosmos.privacy.privacy.MsgTransfer)
     - [MsgTransfer.PaymentInfo](#cosmos.privacy.privacy.MsgTransfer.PaymentInfo)
     - [MsgTransferResponse](#cosmos.privacy.privacy.MsgTransferResponse)
+    - [MsgUnShield](#cosmos.privacy.privacy.MsgUnShield)
   
     - [Msg](#cosmos.privacy.privacy.Msg)
   
@@ -6998,6 +6999,22 @@ Nonprivacy message
 | ----- | ---- | ----- | ----------- |
 | `msg` | [string](#string) |  |  |
 | `is_error` | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgUnShield"></a>
+
+### MsgUnShield
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `to_adrress` | [string](#string) |  |  |
+| `amount` | [uint64](#uint64) |  |  |
 
 
 

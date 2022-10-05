@@ -16,6 +16,10 @@ message MsgShield {
   bytes  proof       = 5;
 }
 
+message MsgUnShield {
+  string to_adrress = 1;
+  uint64 amount = 2;
+}
 
 message MsgPrivacyData {
   uint64 lock_time   = 1;

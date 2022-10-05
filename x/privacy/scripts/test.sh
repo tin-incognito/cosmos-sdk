@@ -1,2 +1,3 @@
 MY_VALIDATOR_ADDRESS=$(echo 12345678 | simd keys show my_validator -a )
-simd tx privacy shield 12skvRi6rzvj8UwUhxcr3xe8Z5YDQyaYvDf7e3FQUhyDMNKLgf1MyXh6GnWPbdvGH898PU1duHYzBJK3Qs7dx75VtttJXjm8aadp3ozDM4XnohccCi4dEdgte8o8n6ff29RHnqE3zcaLirTTcM25 100 --from $MY_VALIDATOR_ADDRESS --chain-id my-test-chain
+simd tx privacy shield 12skvRi6rzvj8UwUhxcr3xe8Z5YDQyaYvDf7e3FQUhyDMNKLgf1MyXh6GnWPbdvGH898PU1duHYzBJK3Qs7dx75VtttJXjm8aadp3ozDM4XnohccCi4dEdgte8o8n6ff29RHnqE3zcaLirTTcM25 10000 --from $MY_VALIDATOR_ADDRESS --chain-id my-test-chain
+simd tx privacy unshield 112t8rnXXKcvUtpwcK1HwRsmJvTxp8mCB12Zma7dKWFSNNDkdhjdgg8UCftueJy7t5rStvqYYDvddPiJSTcKpmTXJkHZW9smo3K5moCFZiei cosmos12mvjg7nj24c6e47yj76cxmruek49hxtgktw3fx 50 0.0001stake --from $MY_VALIDATOR_ADDRESS --chain-id my-test-chain

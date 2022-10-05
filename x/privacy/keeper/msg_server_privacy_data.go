@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
@@ -24,7 +23,6 @@ func (k msgServer) PrivacyData(goCtx context.Context, msg *types.MsgPrivacyData)
 			return nil, err
 		}
 		i := sdk.NewInt(int64(unshieldData.Amount))
-	err := k.setPrivacyData(ctx, msg.Proof)
 		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, toAccount, sdk.Coins{}.Add(sdk.Coin{"stake", i}))
 		if err != nil {
 			return nil, err

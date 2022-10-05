@@ -22,6 +22,7 @@ WORKDIR /root
 # Copy over binaries from the build-env
 COPY simd /usr/bin/simd
 COPY scripts/init-chain.sh  ./init-chain.sh
+COPY x/privacy/scripts/test.sh  ./test.sh
 EXPOSE 26656 26657 1317 9090
 # Run simd by default, omit entrypoint to ease using container with simcli
 CMD ["simd"]

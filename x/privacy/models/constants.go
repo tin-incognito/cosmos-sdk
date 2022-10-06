@@ -9,6 +9,7 @@ const (
 const (
 	TxMintType = iota + 1
 	TxTransferType
+	TxUnshieldType
 )
 
 const (

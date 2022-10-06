@@ -483,9 +483,12 @@
 - [cosmos/privacy/tx.proto](#cosmos/privacy/tx.proto)
     - [MsgPrivacyData](#cosmos.privacy.privacy.MsgPrivacyData)
     - [MsgPrivacyDataResponse](#cosmos.privacy.privacy.MsgPrivacyDataResponse)
+    - [MsgShield](#cosmos.privacy.privacy.MsgShield)
+    - [MsgShieldResponse](#cosmos.privacy.privacy.MsgShieldResponse)
     - [MsgTransfer](#cosmos.privacy.privacy.MsgTransfer)
     - [MsgTransfer.PaymentInfo](#cosmos.privacy.privacy.MsgTransfer.PaymentInfo)
     - [MsgTransferResponse](#cosmos.privacy.privacy.MsgTransferResponse)
+    - [MsgUnShield](#cosmos.privacy.privacy.MsgUnShield)
   
     - [Msg](#cosmos.privacy.privacy.Msg)
   
@@ -6907,7 +6910,7 @@ Query defines the gRPC querier service.
 | `sig_pub_key` | [bytes](#bytes) |  |  |
 | `sig` | [bytes](#bytes) |  |  |
 | `proof` | [bytes](#bytes) |  |  |
-| `tx_type` | [int32](#int32) |  |  |
+| `tx_type` | [int32](#int32) |  | transfer, unshield |
 | `metadata` | [bytes](#bytes) |  |  |
 
 
@@ -6918,6 +6921,33 @@ Query defines the gRPC querier service.
 <a name="cosmos.privacy.privacy.MsgPrivacyDataResponse"></a>
 
 ### MsgPrivacyDataResponse
+
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgShield"></a>
+
+### MsgShield
+Nonprivacy message
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `from` | [string](#string) |  |  |
+| `amount` | [uint64](#uint64) |  |  |
+| `proof` | [bytes](#bytes) |  |  |
+
+
+
+
+
+
+<a name="cosmos.privacy.privacy.MsgShieldResponse"></a>
+
+### MsgShieldResponse
 
 
 
@@ -6974,6 +7004,22 @@ Query defines the gRPC querier service.
 
 
 
+
+<a name="cosmos.privacy.privacy.MsgUnShield"></a>
+
+### MsgUnShield
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `to_adrress` | [string](#string) |  |  |
+| `amount` | [uint64](#uint64) |  |  |
+
+
+
+
+
  <!-- end messages -->
 
  <!-- end enums -->
@@ -6989,6 +7035,7 @@ Msg defines the Msg service.
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `PrivacyData` | [MsgPrivacyData](#cosmos.privacy.privacy.MsgPrivacyData) | [MsgPrivacyDataResponse](#cosmos.privacy.privacy.MsgPrivacyDataResponse) |  | |
+| `ShieldCoin` | [MsgShield](#cosmos.privacy.privacy.MsgShield) | [MsgShieldResponse](#cosmos.privacy.privacy.MsgShieldResponse) |  | |
 
  <!-- end services -->
 

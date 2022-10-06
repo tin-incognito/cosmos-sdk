@@ -131,6 +131,7 @@ var (
 		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
+		privacyTypes.ModuleName:        nil,
 	}
 )
 
@@ -301,6 +302,7 @@ func NewSimApp(
 
 	// custom module
 	app.PrivacyKeeper = *privacyKeeper.NewKeeper(
+		app.BankKeeper,
 		appCodec,
 		keys[privacyTypes.StoreKey],
 		keys[privacyTypes.MemStoreKey],

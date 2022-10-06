@@ -6,6 +6,19 @@ option go_package = "x/privacy/types";
 // Msg defines the Msg service.
 service Msg {
   rpc PrivacyData(MsgPrivacyData) returns (MsgPrivacyDataResponse);
+  rpc ShieldCoin(MsgShield) returns (MsgShieldResponse);
+}
+
+// Nonprivacy message
+message MsgShield {
+  string from = 1;
+  uint64 amount = 2;
+  bytes  proof       = 5;
+}
+
+message MsgUnShield {
+  string to_adrress = 1;
+  uint64 amount = 2;
 }
 
 message MsgPrivacyData {
@@ -15,11 +28,12 @@ message MsgPrivacyData {
   bytes  sig_pub_key = 4;
   bytes  sig         = 5;
   bytes  proof       = 6;
-  int32  tx_type     = 7;
+  int32  tx_type     = 7; // transfer, unshield
   bytes  metadata    = 8;
 }
 
 message MsgPrivacyDataResponse {}
+message MsgShieldResponse {}
 
 message MsgTransfer {
   string  creator     = 1;

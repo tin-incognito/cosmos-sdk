@@ -2,6 +2,7 @@ package coin
 
 import (
 	"fmt"
+	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
@@ -106,15 +107,15 @@ func NewCoinFromPaymentInfo(paymentInfo *key.PaymentInfo) (*Coin, error) {
 	c.SetInfo(paymentInfo.Message)
 	c.SetCommitment(operation.PedCom.CommitAtIndex(c.GetAmount(), c.GetRandomness(), operation.PedersenValueIndex))
 
-	/*// If this is going to burning address then dont need to create ota*/
-	/*if common.IsPublicKeyBurningAddress(p.PaymentAddress.Pk) {*/
-	/*publicKey, err := new(operation.Point).FromBytesS(p.PaymentAddress.Pk)*/
-	/*if err != nil {*/
-	/*panic("Something is wrong with info.paymentAddress.pk, burning address should be a valid point")*/
-	/*}*/
-	/*c.SetPublicKey(publicKey)*/
-	/*return c, nil*/
-	/*}*/
+	// If this is going to burning address then dont need to create ota*/
+	if wallet.IsPublicKeyBurningAddress(paymentInfo.PaymentAddress.Pk) {
+		publicKey, err := new(operation.Point).FromBytesS(paymentInfo.PaymentAddress.Pk)
+		if err != nil {
+			panic("Something is wrong with info.paymentAddress.pk, burning address should be a valid point")
+		}
+		c.SetPublicKey(publicKey)
+		return c, nil
+	}
 
 	index := uint32(0)
 	publicOTA := paymentInfo.PaymentAddress.GetOTAPublicKey()

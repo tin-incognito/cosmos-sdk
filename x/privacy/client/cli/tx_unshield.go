@@ -3,28 +3,26 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	types2 "github.com/cosmos/cosmos-sdk/types"
-	"strconv"
-	"strings"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
 	"github.com/spf13/cobra"
+	"strconv"
 )
 
 var _ = strconv.Itoa(0)
 
-func CmdTransfer() *cobra.Command {
+func CmdUnshield() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "transfer [private_key] [payment_infos] [gasPrice]",
+		Use:   "unshield [private_key] [nonprivacy_address] [amount] [gasPrice]",
 		Short: "Broadcast message transfer",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -33,29 +31,15 @@ func CmdTransfer() *cobra.Command {
 			}
 
 			privateKey := args[0]
-			paymentInfos := []*types.MsgTransfer_PaymentInfo{}
-			infos := strings.Split(args[1], ",")
-			for _, v := range infos {
-				temp := strings.Split(v, "-")
-				paymentInfo := &types.MsgTransfer_PaymentInfo{}
-				for i, value := range temp {
-					if i == 0 {
-						paymentInfo.PaymentAddress = value
-					} else if i == 1 {
-						amount, err := strconv.ParseUint(value, 10, 64)
-						if err != nil {
-							return err
-						}
-						paymentInfo.Amount = amount
-					} else if i == 2 {
-						paymentInfo.Info = []byte(value)
-					} else {
-						return fmt.Errorf("Invalid format payment infos %s", v)
-					}
-				}
-				paymentInfos = append(paymentInfos, paymentInfo)
+			toAddress := args[1]
+			amountStr := args[2]
+			amount, err := strconv.ParseUint(amountStr, 10, 64)
+			if err != nil {
+				return err
 			}
-			gasPriceArgs := args[2]
+			paymentInfos := []*types.MsgTransfer_PaymentInfo{{"12RxahVABnAVCGP3LGwCn8jkQxgw7z1x14wztHzn455TTVpi1wBq9YGwkRMQg3J4e657AbAnCvYCJSdA9czBUNuCKwGSRQt55Xwz8WA", amount, nil}}
+
+			gasPriceArgs := args[3]
 			gasPriceCoin, err := types2.ParseDecCoin(gasPriceArgs)
 			if err != nil {
 				return err
@@ -86,7 +70,11 @@ func CmdTransfer() *cobra.Command {
 			}
 
 			//simulate
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash, clientCtx, cmd, nil)
+			unshield := types.MsgUnShield{
+				ToAdrress: toAddress,
+				Amount:    amount,
+			}
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash, clientCtx, cmd, unshield)
 			if err != nil {
 				return err
 			}
@@ -99,7 +87,11 @@ func CmdTransfer() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash, clientCtx, cmd, nil)
+			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash, clientCtx, cmd, unshield)
+			if err != nil {
+				return err
+			}
+			msg.TxType = models.TxUnshieldType
 			if err != nil {
 				return err
 			}

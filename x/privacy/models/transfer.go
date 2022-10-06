@@ -23,7 +23,7 @@ func BuildTransferTx(
 	keySet key.KeySet,
 	msgTransferPaymentInfos []*types.MsgTransfer_PaymentInfo,
 	gasLimit uint64, gasPrice types2.Dec, hashedMessage common.Hash,
-	clientContext client.Context, cmd *cobra.Command,
+	clientContext client.Context, cmd *cobra.Command, metadata interface{},
 ) (*types.MsgPrivacyData, error) {
 	var amount uint64
 	var err error
@@ -60,7 +60,25 @@ func BuildTransferTx(
 		return nil, err
 	}
 
-	return buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd)
+	msgPrivacyData, err := buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	switch metadata.(type) {
+	case types.MsgUnShield:
+		unshield := metadata.(types.MsgUnShield)
+		msgPrivacyData.Metadata, err = (&unshield).Marshal()
+		msgPrivacyData.TxType = TxUnshieldType
+		if err != nil {
+			return nil, err
+		}
+	default:
+		msgPrivacyData.Metadata = nil
+		msgPrivacyData.TxType = TxTransferType
+	}
+
+	return msgPrivacyData, nil
 }
 
 func buildTransferTx(
@@ -77,7 +95,6 @@ func buildTransferTx(
 		return nil, err
 	}
 	res.Proof = proof.Bytes()
-	res.TxType = TxTransferType
 	res.Fee = fee
 
 	return res, nil

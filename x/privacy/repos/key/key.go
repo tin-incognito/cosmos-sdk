@@ -3,6 +3,7 @@ package key
 import (
 	"encoding/hex"
 	"errors"
+	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/operation"
 )
@@ -125,6 +126,18 @@ func (addr *PaymentAddress) SetBytes(bytes []byte) error {
 func (addr PaymentAddress) String() string {
 	byteArrays := addr.Bytes()
 	return hex.EncodeToString(byteArrays)
+}
+
+func (addr *PaymentAddress) ImportFromString(str string) error {
+	keyWallet, err := wallet.Base58CheckDeserialize(str)
+	if err != nil {
+		return err
+	}
+	err = addr.SetBytes(keyWallet.KeySet.PaymentAddress.Bytes())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (addr PaymentAddress) GetPublicSpend() *operation.Point {

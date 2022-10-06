@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
@@ -11,6 +12,28 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/schnorr"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
+
+func BuildShieldTx(
+	from sdk.AccAddress,
+	otaReceiver coin.OTAReceiver,
+	amount uint64,
+	info []byte,
+) (*types.MsgShield, error) {
+	outputCoin, err := GenerateOutputCoin(amount, info, otaReceiver)
+	if err != nil {
+		return nil, err
+	}
+
+	proof := repos.NewPaymentProof()
+	proof.SetOutputCoins([]*coin.Coin{outputCoin})
+
+	res := &types.MsgShield{
+		From:   from.String(),
+		Amount: amount,
+		Proof:  proof.Bytes(),
+	}
+	return res, nil
+}
 
 func BuildMintTx(
 	otaReceiver coin.OTAReceiver,

@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
 
-func (k Keeper) setPrivacyData(ctx sdk.Context, data *types.MsgPrivacyData) error {
+func (k Keeper) setPrivacyData(ctx sdk.Context, proof []byte) error {
 	outputCoinLength := big.NewInt(0)
 	outputCoinSerialNumber, ok := k.GetOutputCoinLength(ctx)
 	if ok {
@@ -17,7 +17,7 @@ func (k Keeper) setPrivacyData(ctx sdk.Context, data *types.MsgPrivacyData) erro
 	}
 
 	// parse data
-	serialNumbers, commitments, outputCoins, otaCoins, onetimeAddresses, newOutputCoinLength, err := models.FetchDataFromTx(ctx, data, *outputCoinLength)
+	serialNumbers, commitments, outputCoins, otaCoins, onetimeAddresses, newOutputCoinLength, err := models.FetchDataFromTx(ctx, proof, *outputCoinLength)
 	if err != nil {
 		return err
 	}

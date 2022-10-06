@@ -91,10 +91,6 @@ func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Facto
 // given set of messages. It will also simulate gas requirements if necessary.
 // It will return an error upon failure.
 func BroadcastPrivacyTx(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) error {
-	txf, err := prepareFactory(clientCtx, txf)
-	if err != nil {
-		return err
-	}
 
 	if txf.SimulateAndExecute() || clientCtx.Simulate {
 		_, adjusted, err := CalculateGas(clientCtx, txf, msgs...)

@@ -15,7 +15,7 @@ accC_Priv=112t8rnq9oRPURjwuzyjCRbQqZk3iQbHCXRBLRGUp9EBjVdd7HMpRCSTWUrw7gKRNtqVTh
 accC_Pay=12sjT1YQTyB2yQSd325JAYR9QvNq44cQkoWjphiu5HnSrMdxUiLMZCq6B2fKhi87HfRVZAZHM3vc2yCjKwTcRAy1rDAevmswbBsqRY7as8rksFbAAVhUm9BTRwSQfaWXDh3F3AdWvnVRfSUMcaaT
 
 echo "Send coin to A ... "
-echo 12345678 | simd tx bank send $MY_VALIDATOR_ADDRESS $accA_N 5000stake --chain-id my-test-chain -y
+echo 12345678 | simd tx bank send $MY_VALIDATOR_ADDRESS $accA_N 5000prv --chain-id my-test-chain -y
 
 
 checkbalance() {
@@ -38,10 +38,10 @@ echo 12345678 | simd tx privacy shield $accB_Pay 500 --from accA_N --chain-id my
 
 checkbalance
 
-echo 12345678 | simd tx privacy transfer $accB_Priv $accC_Pay-300 0stake --from my_validator --chain-id my-test-chain -y
+echo 12345678 | simd tx privacy transfer $accB_Priv $accC_Pay-300 0prv --chain-id my-test-chain -y
 
 checkbalance
 
-echo 12345678 | simd tx privacy unshield $accC_Priv $accC_N 200 0stake --from my_validator --chain-id my-test-chain -y
+echo 12345678 | simd tx privacy unshield $accC_Priv $accC_N 200 0prv --chain-id my-test-chain -y
 
 checkbalance

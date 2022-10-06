@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
@@ -13,8 +14,12 @@ func (k msgServer) ShieldCoin(shieldCtx context.Context, shield *types.MsgShield
 	ctx := types2.UnwrapSDKContext(shieldCtx)
 
 	k.bankKeeper.SendCoinsFromAccountToModule(ctx, fromAcc, types.ModuleName, types2.Coins{}.Add(types2.Coin{"stake", i}))
+	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, fromAcc, types.ModuleName, types2.Coins{}.Add(types2.Coin{types2.DefaultBondDenom, i}))
+	if err != nil {
+		return nil, err
+	}
 
-	err := k.setPrivacyData(ctx, shield.GetProof())
+	err = k.setPrivacyData(ctx, shield.GetProof())
 	if err != nil {
 		return nil, err
 	}

@@ -23,7 +23,7 @@ func (k msgServer) PrivacyData(goCtx context.Context, msg *types.MsgPrivacyData)
 			return nil, err
 		}
 		i := sdk.NewInt(int64(unshieldData.Amount))
-		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, toAccount, sdk.Coins{}.Add(sdk.Coin{"stake", i}))
+		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, toAccount, sdk.Coins{}.Add(sdk.Coin{"prv", i}))
 		if err != nil {
 			return nil, err
 		}

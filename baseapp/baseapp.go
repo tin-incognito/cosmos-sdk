@@ -691,17 +691,39 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 	// and we're in DeliverTx. Note, runMsgs will never return a reference to a
 	// Result if any single message fails or does not have a registered Handler.
 	result, err = app.runMsgs(runMsgCtx, msgs, mode)
-	if err == nil && mode == runTxModeDeliver {
-		// When block gas exceeds, it'll panic and won't commit the cached store.
-		consumeBlockGas()
 
-		msCache.Write()
+	if err == nil {
+		/*isPrivacy, err := tx.IsPrivacy()*/
+		/*if err != nil {*/
+		/*return gInfo, nil, nil, err*/
+		/*}*/
+		if mode == runTxModeDeliver {
+			// When block gas exceeds, it'll panic and won't commit the cached store.
+			consumeBlockGas()
 
-		if len(anteEvents) > 0 {
-			// append the events in the order of occurrence
-			result.Events = append(anteEvents, result.Events...)
+			msCache.Write()
+
+			if len(anteEvents) > 0 {
+				// append the events in the order of occurrence
+				result.Events = append(anteEvents, result.Events...)
+			}
 		}
+		/*if isPrivacy || mode == runTxModeDeliver {*/
+
+		/*}*/
 	}
+
+	/*if err == nil && mode == runTxModeDeliver {*/
+	/*// When block gas exceeds, it'll panic and won't commit the cached store.*/
+	/*consumeBlockGas()*/
+
+	/*msCache.Write()*/
+
+	/*if len(anteEvents) > 0 {*/
+	/*// append the events in the order of occurrence*/
+	/*result.Events = append(anteEvents, result.Events...)*/
+	/*}*/
+	/*}*/
 
 	return gInfo, result, anteEvents, err
 }

@@ -693,11 +693,11 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 	result, err = app.runMsgs(runMsgCtx, msgs, mode)
 
 	if err == nil {
-		/*isPrivacy, err := tx.IsPrivacy()*/
-		/*if err != nil {*/
-		/*return gInfo, nil, nil, err*/
-		/*}*/
-		if mode == runTxModeDeliver {
+		isPrivacy, err := tx.IsPrivacy()
+		if err != nil {
+			return gInfo, nil, nil, err
+		}
+		if mode == runTxModeDeliver || isPrivacy {
 			// When block gas exceeds, it'll panic and won't commit the cached store.
 			consumeBlockGas()
 
@@ -708,22 +708,7 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 				result.Events = append(anteEvents, result.Events...)
 			}
 		}
-		/*if isPrivacy || mode == runTxModeDeliver {*/
-
-		/*}*/
 	}
-
-	/*if err == nil && mode == runTxModeDeliver {*/
-	/*// When block gas exceeds, it'll panic and won't commit the cached store.*/
-	/*consumeBlockGas()*/
-
-	/*msCache.Write()*/
-
-	/*if len(anteEvents) > 0 {*/
-	/*// append the events in the order of occurrence*/
-	/*result.Events = append(anteEvents, result.Events...)*/
-	/*}*/
-	/*}*/
 
 	return gInfo, result, anteEvents, err
 }

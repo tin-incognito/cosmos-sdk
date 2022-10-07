@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	"fmt"
+
 	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )

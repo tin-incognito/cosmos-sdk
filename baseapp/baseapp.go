@@ -692,17 +692,31 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 	// Result if any single message fails or does not have a registered Handler.
 	result, err = app.runMsgs(runMsgCtx, msgs, mode)
 
+	if err == nil && mode == runTxModeDeliver {
+		// When block gas exceeds, it'll panic and won't commit the cached store.
+		consumeBlockGas()
+
+		msCache.Write()
+
+		if len(anteEvents) > 0 {
+			// append the events in the order of occurrence
+			result.Events = append(anteEvents, result.Events...)
+		}
+	}
+
 	if err == nil {
 		isPrivacy, err := tx.IsPrivacy()
 		if err != nil {
 			return gInfo, nil, nil, err
 		}
-		if mode == runTxModeDeliver || isPrivacy {
+
+		if mode == runTxModeDeliver {
 			// When block gas exceeds, it'll panic and won't commit the cached store.
 			consumeBlockGas()
+		}
 
+		if mode == runTxModeDeliver || isPrivacy {
 			msCache.Write()
-
 			if len(anteEvents) > 0 {
 				// append the events in the order of occurrence
 				result.Events = append(anteEvents, result.Events...)

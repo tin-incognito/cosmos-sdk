@@ -43,7 +43,7 @@ type Cache struct {
 }
 
 func NewCache() *Cache {
-	proofCache, err := simplelru.NewLRU(60000, nil)
+	proofCache, err := simplelru.NewLRU(6*1024*1024, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -53,10 +53,7 @@ func NewCache() *Cache {
 }
 
 func (c *Cache) AddProof(key common.Hash, proof *repos.PaymentProof) error {
-	ok := c.Proofs.Add(key.String(), proof)
-	if !ok {
-		return fmt.Errorf("cannot add %s-%v to cache", key.String(), proof)
-	}
+	c.Proofs.Add(key.String(), proof)
 	return nil
 }
 

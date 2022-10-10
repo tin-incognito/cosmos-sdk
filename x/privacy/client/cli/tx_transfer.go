@@ -3,9 +3,10 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	types2 "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"strings"
+
+	types2 "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -26,7 +27,6 @@ func CmdTransfer() *cobra.Command {
 		Short: "Broadcast message transfer",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
@@ -95,7 +95,6 @@ func CmdTransfer() *cobra.Command {
 			pflag.Set("gas-adjustment", fmt.Sprint(1.01))
 			txf := tx.NewFactoryForPrivacyTxCLI(clientCtx, pflag)
 			_, simGasLimit, err := tx.CalculateGas(clientCtx, txf, msg)
-
 			if err != nil {
 				return err
 			}

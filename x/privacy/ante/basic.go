@@ -42,7 +42,6 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 			return ctx, err
 		}
 		if !isMintTx {
-
 			//TODO: @tin validate metadata by itself
 			key, err := common.NewHashFromBytes(msg.Hash)
 			if err != nil {
@@ -57,8 +56,6 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 				if err = vbi.c.AddProof(*key, proof); err != nil {
 					return ctx, err
 				}
-			} else {
-				fmt.Println("err:", err)
 			}
 
 			// TODO: @tin add confidential asset verify later

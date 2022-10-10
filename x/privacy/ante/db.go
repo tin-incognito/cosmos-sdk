@@ -54,16 +54,12 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 				if err = vbdd.c.AddProof(*key, proof); err != nil {
 					return ctx, err
 				}
-			} else {
-				fmt.Println("err:", err)
 			}
 			inputCoins := proof.InputCoins()
 			for _, item := range inputCoins {
 				isConfidentialAsset := item.AssetTag != nil
 				serialNum := item.GetKeyImage().ToBytesS()
 				hash := common.HashH(append([]byte{common.BoolToByte(isConfidentialAsset)}, serialNum...))
-				//fmt.Println("vbdd:", vbdd)
-				//fmt.Println("vbdd.pk:", vbdd.pk)
 				if _, found := vbdd.pk.GetSerialNumber(ctx, hash.String()); found {
 					return ctx, fmt.Errorf("Duplicate serialNumber %s", item.GetKeyImage().String())
 				}

@@ -60,7 +60,6 @@ func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 		if actualTxSize > common.MaxTxSize {
 			return false, fmt.Errorf("tx size %d kB is too large", actualTxSize)
 		}
-
 		key, err := common.NewHashFromBytes(msg.Hash)
 		if err != nil {
 			return false, err
@@ -74,8 +73,6 @@ func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 			if err = c.AddProof(*key, proof); err != nil {
 				return false, err
 			}
-		} else {
-			fmt.Println("err:", err)
 		}
 
 		valid, err := proof.ValidateSanity()

@@ -11,39 +11,43 @@ service Msg {
 
 // Nonprivacy message
 message MsgShield {
-  string from = 1;
-  uint64 amount = 2;
-  bytes  proof       = 5;
+  bytes hash = 1;
+  string from = 2;
+  uint64 amount = 3;
+  bytes  proof       = 4;
 }
 
 message MsgUnShield {
-  string to_adrress = 1;
-  uint64 amount = 2;
+  bytes hash = 1;
+  string to_adrress = 2;
+  uint64 amount = 3;
 }
 
 message MsgPrivacyData {
-  uint64 lock_time   = 1;
-  uint64 fee         = 2;
-  bytes  info        = 3;
-  bytes  sig_pub_key = 4;
-  bytes  sig         = 5;
-  bytes  proof       = 6;
-  int32  tx_type     = 7; // transfer, unshield
-  bytes  metadata    = 8;
+  bytes hash = 1;
+  uint64 lock_time   = 2;
+  uint64 fee         = 3;
+  bytes  info        = 4;
+  bytes  sig_pub_key = 5;
+  bytes  sig         = 6;
+  bytes  proof       = 7;
+  int32  tx_type     = 8; // transfer, unshield
+  bytes  metadata    = 9;
 }
 
 message MsgPrivacyDataResponse {}
 message MsgShieldResponse {}
 
 message MsgTransfer {
-  string  creator     = 1;
-  string  private_key = 2;
+  bytes  hash     = 1;
+  string  creator     = 2;
+  string  private_key = 3;
   message PaymentInfo {
     string payment_address = 1;
     uint64 amount          = 2;
     bytes  info            = 3;
   }
-  repeated PaymentInfo payment_infos = 3;
+  repeated PaymentInfo payment_infos = 4;
 }
 
 message MsgTransferResponse {

@@ -5,14 +5,17 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
 
-type ValidateByItself struct{}
+type ValidateByItself struct {
+	c *Cache
+}
 
-func NewValidateByItself() ValidateByItself {
-	return ValidateByItself{}
+func NewValidateByItself(c *Cache) ValidateByItself {
+	return ValidateByItself{c: c}
 }
 
 func (vbi ValidateByItself) IsPrivacy() bool {
@@ -39,12 +42,25 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 			return ctx, err
 		}
 		if !isMintTx {
+
 			//TODO: @tin validate metadata by itself
-			proof := repos.NewPaymentProof()
-			err := proof.SetBytes(msg.Proof)
+			key, err := common.NewHashFromBytes(msg.Hash)
 			if err != nil {
 				return ctx, err
 			}
+			proof, err := vbi.c.GetProof(*key)
+			if err != nil {
+				proof := repos.NewPaymentProof()
+				if err = proof.SetBytes(msg.Proof); err != nil {
+					return ctx, err
+				}
+				if err = vbi.c.AddProof(*key, proof); err != nil {
+					return ctx, err
+				}
+			} else {
+				fmt.Println("err:", err)
+			}
+
 			// TODO: @tin add confidential asset verify later
 			isValid, err := proof.Verify()
 			if err != nil {

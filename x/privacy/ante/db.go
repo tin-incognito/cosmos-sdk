@@ -11,11 +11,12 @@ import (
 )
 
 type ValidateByDbDecorator struct {
+	c  *Cache
 	pk PrivacyKeeper
 }
 
-func NewValidateByDbDecorator(privacyKeeper PrivacyKeeper) ValidateByDbDecorator {
-	return ValidateByDbDecorator{pk: privacyKeeper}
+func NewValidateByDbDecorator(privacyKeeper PrivacyKeeper, c *Cache) ValidateByDbDecorator {
+	return ValidateByDbDecorator{pk: privacyKeeper, c: c}
 }
 
 func (vbdd ValidateByDbDecorator) IsPrivacy() bool {
@@ -40,10 +41,21 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 			return ctx, err
 		}
 		if !isMintTx {
-			proof := repos.NewPaymentProof()
-			err := proof.SetBytes(msg.Proof)
+			key, err := common.NewHashFromBytes(msg.Hash)
 			if err != nil {
 				return ctx, err
+			}
+			proof, err := vbdd.c.GetProof(*key)
+			if err != nil {
+				proof = repos.NewPaymentProof()
+				if err = proof.SetBytes(msg.Proof); err != nil {
+					return ctx, err
+				}
+				if err = vbdd.c.AddProof(*key, proof); err != nil {
+					return ctx, err
+				}
+			} else {
+				fmt.Println("err:", err)
 			}
 			inputCoins := proof.InputCoins()
 			for _, item := range inputCoins {

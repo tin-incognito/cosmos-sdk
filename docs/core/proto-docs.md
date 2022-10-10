@@ -6904,6 +6904,7 @@ Query defines the gRPC querier service.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `hash` | [bytes](#bytes) |  |  |
 | `lock_time` | [uint64](#uint64) |  |  |
 | `fee` | [uint64](#uint64) |  |  |
 | `info` | [bytes](#bytes) |  |  |
@@ -6936,6 +6937,7 @@ Nonprivacy message
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `hash` | [bytes](#bytes) |  |  |
 | `from` | [string](#string) |  |  |
 | `amount` | [uint64](#uint64) |  |  |
 | `proof` | [bytes](#bytes) |  |  |
@@ -6963,6 +6965,7 @@ Nonprivacy message
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `hash` | [bytes](#bytes) |  |  |
 | `creator` | [string](#string) |  |  |
 | `private_key` | [string](#string) |  |  |
 | `payment_infos` | [MsgTransfer.PaymentInfo](#cosmos.privacy.privacy.MsgTransfer.PaymentInfo) | repeated |  |
@@ -7013,6 +7016,7 @@ Nonprivacy message
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `hash` | [bytes](#bytes) |  |  |
 | `to_adrress` | [string](#string) |  |  |
 | `amount` | [uint64](#uint64) |  |  |
 

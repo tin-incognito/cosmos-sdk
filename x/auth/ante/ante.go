@@ -40,6 +40,8 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		sigGasConsumer = DefaultSigVerificationGasConsumer
 	}
 
+	privacyCache := privacyAnte.NewCache()
+
 	anteDecorators := []sdk.AnteDecorator{
 		NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		NewRejectExtensionOptionsDecorator(),
@@ -55,9 +57,9 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		NewSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
 		NewIncrementSequenceDecorator(options.AccountKeeper),
 		// Add validate double spend in mem pool later for mint tx
-		privacyAnte.NewValidateSanityDecorator(),
-		privacyAnte.NewValidateByItself(),
-		privacyAnte.NewValidateByDbDecorator(options.PrivacyKeeper),
+		privacyAnte.NewValidateSanityDecorator(privacyCache),
+		privacyAnte.NewValidateByItself(privacyCache),
+		privacyAnte.NewValidateByDbDecorator(options.PrivacyKeeper, privacyCache),
 	}
 
 	return sdk.ChainAnteDecorators(anteDecorators...), nil

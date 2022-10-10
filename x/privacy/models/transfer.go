@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"time"
 
 	types2 "github.com/cosmos/cosmos-sdk/types"
 
@@ -34,9 +35,6 @@ func BuildTransferTx(
 		}
 	}
 
-	/*flags.AddPaginationFlagsToCmd(cmd, cmd.Use)*/
-	/*flags.AddQueryFlagsToCmd(cmd)*/
-
 	pageReq, err := client.ReadPageRequest(cmd.Flags())
 	if err != nil {
 
@@ -60,7 +58,7 @@ func BuildTransferTx(
 		return nil, err
 	}
 
-	msgPrivacyData, err := buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd)
+	msgPrivacyData, err := buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +81,7 @@ func BuildTransferTx(
 
 func buildTransferTx(
 	inputCoins []*OutputCoin, keySet key.KeySet, paymentInfos []*key.PaymentInfo, fee uint64, hashedMessage common.Hash,
-	clientContext client.Context, cmd *cobra.Command,
+	clientContext client.Context, cmd *cobra.Command, md []byte,
 ) (*types.MsgPrivacyData, error) {
 	proof, outputCoins, err := Prove(inputCoins, paymentInfos)
 	if err != nil {
@@ -94,8 +92,10 @@ func buildTransferTx(
 	if err != nil {
 		return nil, err
 	}
+	hash := MsgHash(uint64(time.Now().Unix()), fee, proof, md)
 	res.Proof = proof.Bytes()
 	res.Fee = fee
+	res.Hash = hash.Bytes()
 
 	return res, nil
 }

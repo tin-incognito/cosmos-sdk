@@ -12,10 +12,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
 
-type ValidateSanityDecorator struct{}
+type ValidateSanityDecorator struct {
+	c *Cache
+}
 
-func NewValidateSanityDecorator() ValidateSanityDecorator {
-	return ValidateSanityDecorator{}
+func NewValidateSanityDecorator(c *Cache) ValidateSanityDecorator {
+	return ValidateSanityDecorator{c: c}
 }
 
 func (vsd ValidateSanityDecorator) IsPrivacy() bool {
@@ -33,7 +35,7 @@ func (vsd ValidateSanityDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 
 	// no need to check index, has been checked before
 	msg := tx.GetMsgs()[0]
-	isValid, err := validateSanity(msg)
+	isValid, err := validateSanity(msg, vsd.c)
 	if err != nil {
 		return ctx, err
 	}
@@ -45,7 +47,7 @@ func (vsd ValidateSanityDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 	return next(ctx, tx, simulate)
 }
 
-func validateSanity(msg sdk.Msg) (bool, error) {
+func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 	switch msg := msg.(type) {
 	case *types.MsgPrivacyData:
 		// check LockTime before now
@@ -58,11 +60,24 @@ func validateSanity(msg sdk.Msg) (bool, error) {
 		if actualTxSize > common.MaxTxSize {
 			return false, fmt.Errorf("tx size %d kB is too large", actualTxSize)
 		}
-		proof := repos.NewPaymentProof()
-		err := proof.SetBytes(msg.Proof)
+
+		key, err := common.NewHashFromBytes(msg.Hash)
 		if err != nil {
 			return false, err
 		}
+		proof, err := c.GetProof(*key)
+		if err != nil {
+			proof = repos.NewPaymentProof()
+			if err = proof.SetBytes(msg.Proof); err != nil {
+				return false, err
+			}
+			if err = c.AddProof(*key, proof); err != nil {
+				return false, err
+			}
+		} else {
+			fmt.Println("err:", err)
+		}
+
 		valid, err := proof.ValidateSanity()
 		if err != nil {
 			return false, err

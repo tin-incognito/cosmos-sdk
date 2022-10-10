@@ -2,8 +2,9 @@ package models
 
 import (
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/coin"
@@ -27,7 +28,10 @@ func BuildShieldTx(
 	proof := repos.NewPaymentProof()
 	proof.SetOutputCoins([]*coin.Coin{outputCoin})
 
+	hash := MsgHash(uint64(time.Now().Unix()), 0, proof, nil)
+
 	res := &types.MsgShield{
+		Hash:   hash.Bytes(),
 		From:   from.String(),
 		Amount: amount,
 		Proof:  proof.Bytes(),
@@ -59,6 +63,7 @@ func BuildMintTx(
 	}
 
 	res := &types.MsgPrivacyData{
+		Hash:      hash.Bytes(),
 		Proof:     proof.Bytes(),
 		SigPubKey: sigPubKey,
 		Sig:       sig,

@@ -1,19 +1,18 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
+	"strconv"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	types2 "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
 var _ = strconv.Itoa(0)
@@ -49,16 +48,6 @@ func CmdUnshield() *cobra.Command {
 				return err
 			}
 
-			m := types.MsgTransfer{
-				PrivateKey:   privateKey,
-				PaymentInfos: paymentInfos,
-			}
-
-			msgBytes, err := json.Marshal(m)
-			if err != nil {
-				return err
-			}
-			hash := common.HashH(msgBytes)
 			keyWallet, err := wallet.Base58CheckDeserialize(privateKey)
 			if err != nil {
 				return err
@@ -70,11 +59,11 @@ func CmdUnshield() *cobra.Command {
 			}
 
 			//simulate
-			unshield := types.MsgUnShield{
+			unshield := &types.MsgUnShield{
 				ToAdrress: toAddress,
 				Amount:    amount,
 			}
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash, clientCtx, cmd, unshield)
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, clientCtx, cmd, unshield)
 			if err != nil {
 				return err
 			}
@@ -87,7 +76,7 @@ func CmdUnshield() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash, clientCtx, cmd, unshield)
+			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, clientCtx, cmd, unshield)
 			if err != nil {
 				return err
 			}

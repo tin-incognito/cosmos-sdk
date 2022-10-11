@@ -23,8 +23,8 @@ import (
 func BuildTransferTx(
 	keySet key.KeySet,
 	msgTransferPaymentInfos []*types.MsgTransfer_PaymentInfo,
-	gasLimit uint64, gasPrice types2.Dec, hashedMessage common.Hash,
-	clientContext client.Context, cmd *cobra.Command, metadata interface{},
+	gasLimit uint64, gasPrice types2.Dec,
+	clientContext client.Context, cmd *cobra.Command, metadata Metadata,
 ) (*types.MsgPrivacyData, error) {
 	var amount uint64
 	var err error
@@ -58,32 +58,41 @@ func BuildTransferTx(
 		return nil, err
 	}
 
-	msgPrivacyData, err := buildTransferTx(coins, keySet, paymentInfos, fee, hashedMessage, clientContext, cmd, nil)
+	msgPrivacyData, err := buildTransferTx(coins, keySet, paymentInfos, fee, clientContext, cmd, metadata)
 	if err != nil {
 		return nil, err
-	}
-
-	switch metadata.(type) {
-	case types.MsgUnShield:
-		unshield := metadata.(types.MsgUnShield)
-		msgPrivacyData.Metadata, err = (&unshield).Marshal()
-		msgPrivacyData.TxType = TxUnshieldType
-		if err != nil {
-			return nil, err
-		}
-	default:
-		msgPrivacyData.Metadata = nil
-		msgPrivacyData.TxType = TxTransferType
 	}
 
 	return msgPrivacyData, nil
 }
 
 func buildTransferTx(
-	inputCoins []*OutputCoin, keySet key.KeySet, paymentInfos []*key.PaymentInfo, fee uint64, hashedMessage common.Hash,
-	clientContext client.Context, cmd *cobra.Command, md []byte,
+	inputCoins []*OutputCoin, keySet key.KeySet, paymentInfos []*key.PaymentInfo, fee uint64,
+	clientContext client.Context, cmd *cobra.Command, md Metadata,
 ) (*types.MsgPrivacyData, error) {
+
+	var txType int32
+	switch md.(type) {
+	case *types.MsgUnShield:
+		txType = TxUnshieldType
+	default:
+		txType = TxTransferType
+	}
+
+	// fee, type, metadata
+
+	lockTime := uint64(time.Now().Unix())
+
 	proof, outputCoins, err := Prove(inputCoins, paymentInfos)
+	if err != nil {
+		return nil, err
+	}
+	mdData, err := md.Marshal()
+	if err != nil {
+		return nil, err
+	}
+
+	hashedMessage, err := MsgHashWithoutSig(lockTime, fee, nil, proof, txType, mdData)
 	if err != nil {
 		return nil, err
 	}
@@ -92,10 +101,14 @@ func buildTransferTx(
 	if err != nil {
 		return nil, err
 	}
-	hash := MsgHash(uint64(time.Now().Unix()), fee, proof, md)
+
+	hash := MsgHash(lockTime, fee, proof, md)
 	res.Proof = proof.Bytes()
 	res.Fee = fee
 	res.Hash = hash.Bytes()
+	res.TxType = txType
+	res.Metadata = mdData
+	res.LockTime = lockTime
 
 	return res, nil
 }

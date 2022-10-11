@@ -31,8 +31,6 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 		return next(ctx, tx, simulate)
 	}
 
-	//TODO: @tin validate metadata by itself
-
 	// no need to check index, has been checked before
 	msg := tx.GetMsgs()[0]
 	switch msg := msg.(type) {

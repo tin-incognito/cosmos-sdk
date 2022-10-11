@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -11,7 +10,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/x/privacy/common"
 	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos/key"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
@@ -65,16 +63,6 @@ func CmdTransfer() *cobra.Command {
 				return err
 			}
 
-			m := types.MsgTransfer{
-				PrivateKey:   privateKey,
-				PaymentInfos: paymentInfos,
-			}
-
-			msgBytes, err := json.Marshal(m)
-			if err != nil {
-				return err
-			}
-			hash := common.HashH(msgBytes)
 			keyWallet, err := wallet.Base58CheckDeserialize(privateKey)
 			if err != nil {
 				return err
@@ -86,7 +74,7 @@ func CmdTransfer() *cobra.Command {
 			}
 
 			//simulate
-			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, hash, clientCtx, cmd, nil)
+			msg, err := models.BuildTransferTx(keySet, paymentInfos, 1, gasPrice, clientCtx, cmd, nil)
 			if err != nil {
 				return err
 			}
@@ -98,7 +86,7 @@ func CmdTransfer() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, hash, clientCtx, cmd, nil)
+			msg, err = models.BuildTransferTx(keySet, paymentInfos, simGasLimit, gasPrice, clientCtx, cmd, nil)
 			if err != nil {
 				return err
 			}

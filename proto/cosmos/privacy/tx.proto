@@ -18,9 +18,8 @@ message MsgShield {
 }
 
 message MsgUnShield {
-  bytes hash = 1;
-  string to_adrress = 2;
-  uint64 amount = 3;
+  string to_adrress = 1;
+  uint64 amount = 2;
 }
 
 message MsgPrivacyData {

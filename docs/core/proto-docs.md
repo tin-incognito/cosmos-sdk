@@ -7016,7 +7016,6 @@ Nonprivacy message
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `hash` | [bytes](#bytes) |  |  |
 | `to_adrress` | [string](#string) |  |  |
 | `amount` | [uint64](#uint64) |  |  |
 

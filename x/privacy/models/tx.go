@@ -119,7 +119,7 @@ func parseDataFromProof(proof *repos.PaymentProof, outputCoinLength big.Int) (
 	return acceptedSerialNumbers, acceptedCommitments, acceptedOutputcoins, acceptedOTACoins, acceptedOnetimeAddresses, &outputCoinLength, nil
 }
 
-func MsgHash(lockTime uint64, fee uint64, proof *repos.PaymentProof, md Metadata) common.Hash {
+func MsgHash(lockTime uint64, fee uint64, proof *repos.PaymentProof, md Metadata, txType int, info []byte) common.Hash {
 	record := strconv.FormatUint(lockTime, 10)
 	record += strconv.FormatUint(fee, 10)
 	if proof != nil {
@@ -129,22 +129,9 @@ func MsgHash(lockTime uint64, fee uint64, proof *repos.PaymentProof, md Metadata
 		mdHash := md.Hash()
 		record += mdHash.String()
 	}
+	if len(info) != 0 {
+		record += string(info)
+	}
+	record += strconv.FormatInt(int64(txType), 10)
 	return common.HashH([]byte(record))
-}
-
-func MsgHashWithoutSig(lockTime, fee uint64, info []byte, proof *repos.PaymentProof, txType int32, md []byte) (common.Hash, error) {
-	res := common.Hash{}
-	msg := &types.MsgPrivacyData{
-		LockTime: lockTime,
-		Fee:      fee,
-		Info:     info,
-		Proof:    proof.Bytes(),
-		TxType:   txType,
-		Metadata: md,
-	}
-	data, err := msg.Marshal()
-	if err != nil {
-		return res, err
-	}
-	return common.HashH(data), nil
 }

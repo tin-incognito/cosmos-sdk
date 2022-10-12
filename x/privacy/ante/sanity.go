@@ -43,7 +43,6 @@ func (vsd ValidateSanityDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 		return ctx, fmt.Errorf("Fail to validate sanity")
 	}
 
-	// @tin TODO: validate sanity of metadata here
 	return next(ctx, tx, simulate)
 }
 
@@ -92,6 +91,19 @@ func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 		info := msg.Info
 		if len(info) > common.MaxSizeInfo {
 			return false, fmt.Errorf("wrong tx info length %d bytes, only support info with max length <= %d bytes", len(info), 512)
+		}
+		if len(msg.Metadata) != 0 {
+			md, err := models.GetMetadataFromMsgPrivacyData(msg)
+			if err != nil {
+				return false, err
+			}
+			valid, err := md.ValidateSanity()
+			if err != nil {
+				return false, err
+			}
+			if !valid {
+				return false, fmt.Errorf("can not validate metadata by itself")
+			}
 		}
 		return true, nil
 	default:

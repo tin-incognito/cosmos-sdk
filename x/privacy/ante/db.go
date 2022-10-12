@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/privacy/common"
+	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"github.com/cosmos/cosmos-sdk/x/privacy/repos"
 	"github.com/cosmos/cosmos-sdk/x/privacy/types"
 )
@@ -75,8 +76,19 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 					return ctx, fmt.Errorf("Duplicate onetimeAddress at index %s", hash.String())
 				}
 			}
-
-			//TODO: @tin validate metadata by db
+			if len(msg.Metadata) != 0 {
+				md, err := models.GetMetadataFromMsgPrivacyData(msg)
+				if err != nil {
+					return ctx, err
+				}
+				valid, err := md.ValidateByDb()
+				if err != nil {
+					return ctx, err
+				}
+				if !valid {
+					return ctx, fmt.Errorf("can not validate metadata by itself")
+				}
+			}
 		}
 	default:
 		errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)

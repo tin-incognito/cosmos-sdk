@@ -217,6 +217,14 @@ func (p *PaymentProof) OutputCoins() []coin.Coin {
 	return res
 }
 
+func (p *PaymentProof) OutputCoinsReadOnly() []*coin.Coin {
+	res := make([]*coin.Coin, len(p.outputCoins))
+	for i, v := range p.outputCoins {
+		res[i] = v
+	}
+	return res
+}
+
 func (p *PaymentProof) SetInputCoinAtIndex(index int, c *coin.Coin) error {
 	if index >= len(p.inputCoins) {
 		return fmt.Errorf("Index out of range")

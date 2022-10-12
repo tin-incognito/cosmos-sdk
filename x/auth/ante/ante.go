@@ -58,7 +58,7 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		NewIncrementSequenceDecorator(options.AccountKeeper),
 		// Add validate double spend in mem pool later for mint tx
 		privacyAnte.NewValidateSanityDecorator(privacyCache),
-		privacyAnte.NewValidateByItself(privacyCache),
+		privacyAnte.NewValidateByItself(options.PrivacyKeeper, privacyCache),
 		privacyAnte.NewValidateByDbDecorator(options.PrivacyKeeper, privacyCache),
 	}
 

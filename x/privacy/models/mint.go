@@ -28,7 +28,7 @@ func BuildShieldTx(
 	proof := repos.NewPaymentProof()
 	proof.SetOutputCoins([]*coin.Coin{outputCoin})
 
-	hash := MsgHash(uint64(time.Now().Unix()), 0, proof, nil)
+	hash := MsgHash(uint64(time.Now().Unix()), 0, proof, nil, TxMintType, nil)
 
 	res := &types.MsgShield{
 		Hash:   hash.Bytes(),
@@ -55,7 +55,7 @@ func BuildMintTx(
 	proof.SetOutputCoins([]*coin.Coin{outputCoin})
 	lockTime := uint64(time.Now().Unix())
 
-	hash := MsgHash(lockTime, 0, proof, nil)
+	hash := MsgHash(lockTime, 0, proof, nil, TxMintType, nil)
 
 	sig, sigPubKey, err := SignNoPrivacy(&privateKey, hash.Bytes())
 	if err != nil {

@@ -72,37 +72,30 @@ func buildTransferTx(
 ) (*types.MsgPrivacyData, error) {
 
 	var txType int32
+	var mdData []byte
+	var err error
 	switch md.(type) {
 	case *types.MsgUnShield:
+		mdData, err = md.Marshal()
+		if err != nil {
+			return nil, err
+		}
 		txType = TxUnshieldType
 	default:
 		txType = TxTransferType
 	}
-
-	// fee, type, metadata
-
 	lockTime := uint64(time.Now().Unix())
-
 	proof, outputCoins, err := Prove(inputCoins, paymentInfos)
 	if err != nil {
 		return nil, err
 	}
-	mdData, err := md.Marshal()
+
+	hash := MsgHash(lockTime, fee, proof, md, int(txType), nil)
+	res, err := SignOnMessage(inputCoins, outputCoins, &keySet.PrivateKey, hash.Bytes(), fee, clientContext, cmd)
 	if err != nil {
 		return nil, err
 	}
 
-	hashedMessage, err := MsgHashWithoutSig(lockTime, fee, nil, proof, txType, mdData)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := SignOnMessage(inputCoins, outputCoins, &keySet.PrivateKey, hashedMessage.Bytes(), fee, clientContext, cmd)
-	if err != nil {
-		return nil, err
-	}
-
-	hash := MsgHash(lockTime, fee, proof, md)
 	res.Proof = proof.Bytes()
 	res.Fee = fee
 	res.Hash = hash.Bytes()

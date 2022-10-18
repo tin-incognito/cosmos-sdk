@@ -15,7 +15,7 @@ import (
 
 // GenerateOrBroadcastPrivacyTxCLI will either generate and print and unsigned transaction
 // or sign it and broadcast it returning an error upon failure.
-func GenerateOrBroadcastPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet, msgs ...sdk.Msg) error {
+func GenerateOrBroadcastPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet, msgs ...sdk.Msg) (string, error) {
 	txf := NewFactoryForPrivacyTxCLI(clientCtx, flagSet)
 	return GenerateOrBroadcastPrivacyTxWithFactory(clientCtx, txf, msgs...)
 }
@@ -69,14 +69,14 @@ func NewFactoryForPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet)
 
 // GenerateOrBroadcastTxWithFactory will either generate and print and unsigned transaction
 // or sign it and broadcast it returning an error upon failure.
-func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) error {
+func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) (string, error) {
 	// Validate all msgs before generating or broadcasting the tx.
 	// We were calling ValidateBasic separately in each CLI handler before.
 	// Right now, we're factorizing that call inside this function.
 	// ref: https://github.com/cosmos/cosmos-sdk/pull/9236#discussion_r623803504
 	for _, msg := range msgs {
 		if err := msg.ValidateBasic(); err != nil {
-			return err
+			return "", err
 		}
 	}
 
@@ -84,7 +84,7 @@ func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Facto
 		return GenerateTx(clientCtx, txf, msgs...)
 	}
 
-	return BroadcastPrivacyTx(clientCtx, txf, msgs...)
+	return "", BroadcastPrivacyTx(clientCtx, txf, msgs...)
 }
 
 // BroadcastPrivacyTx attempts to generate, sign and broadcast a transaction with the

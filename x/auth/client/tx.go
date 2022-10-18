@@ -32,7 +32,7 @@ func (gr GasEstimateResponse) String() string {
 
 // PrintUnsignedStdTx builds an unsigned StdTx and prints it to os.Stdout.
 func PrintUnsignedStdTx(txBldr tx.Factory, clientCtx client.Context, msgs []sdk.Msg) error {
-	err := tx.GenerateTx(clientCtx, txBldr, msgs...)
+	_, err := tx.GenerateTx(clientCtx, txBldr, msgs...)
 	return err
 }
 

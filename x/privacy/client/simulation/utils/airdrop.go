@@ -8,6 +8,7 @@ import (
 )
 
 func Airdrop(privateKey string) {
+	getBalanceIncognito(privateKey)
 	fmt.Println("Airdrop 100000 token to account with privateKey", privateKey)
 	keyWallet, err := wallet.Base58CheckDeserialize(privateKey)
 	if err != nil {
@@ -19,10 +20,9 @@ func Airdrop(privateKey string) {
 		panic(err)
 	}
 
-	args := []string{"tx", "privacy", "airdrop", privateKey, "100000", "--from", "alice", "-y"}
-	execCmd(args)
-	args = []string{"query", "privacy", "balance", privateKey}
-	execCmd(args)
+	args := []string{"tx", "privacy", "airdrop", privateKey, "100000", "--from", "my_validator", "--chain-id", "my-test-chain", "-y"}
+	execCmd(args, true)
 	fmt.Println("Press enter to continue")
 	fmt.Scanln()
+	getBalanceIncognito(privateKey)
 }

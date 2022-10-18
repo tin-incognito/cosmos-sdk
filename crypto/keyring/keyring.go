@@ -693,15 +693,17 @@ func newRealPrompt(dir string, buf io.Reader) func(string) (string, error) {
 			}
 
 			buf := bufio.NewReader(buf)
-			pass, err := input.GetPassword("Enter keyring passphrase:", buf)
-			if err != nil {
-				// NOTE: LGTM.io reports a false positive alert that states we are printing the password,
-				// but we only log the error.
-				//
-				// lgtm [go/clear-text-logging]
-				fmt.Fprintln(os.Stderr, err)
-				continue
-			}
+			//TODO: for running script update this pass with your local pass
+			pass := "11234566"
+			/*pass, err := input.GetPassword("Enter keyring passphrase:", buf)*/
+			/*if err != nil {*/
+			/*// NOTE: LGTM.io reports a false positive alert that states we are printing the password,*/
+			/*// but we only log the error.*/
+			/*//*/
+			/*// lgtm [go/clear-text-logging]*/
+			/*fmt.Fprintln(os.Stderr, err)*/
+			/*continue*/
+			/*}*/
 
 			if keyhashStored {
 				if err := bcrypt.CompareHashAndPassword(keyhash, []byte(pass)); err != nil {

@@ -1,8 +1,9 @@
 package cli
 
 import (
-	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 	"strconv"
+
+	"github.com/cosmos/cosmos-sdk/x/privacy/models"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -52,9 +53,10 @@ func CmdShield() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			clientCtx.GenerateOnly = true
 
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-
+			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			return err
 		},
 	}
 

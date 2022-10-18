@@ -1,3 +1,3 @@
 package utils
 
-const execFileDir = "../../../../../cmd/privacyd/privacyd"
+const execFileDir = "../../../../simapp/simd/simd"

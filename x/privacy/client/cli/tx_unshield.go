@@ -86,8 +86,10 @@ func CmdUnshield() *cobra.Command {
 			}
 			pflag.Set("gas", fmt.Sprint(simGasLimit))
 			pflag.Set("gas-prices", fmt.Sprintf("%v", gasPriceArgs))
+			clientCtx.GenerateOnly = true
 
-			return tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, pflag, msg)
+			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			return err
 		},
 	}
 

@@ -87,6 +87,29 @@ func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Facto
 	return "", BroadcastPrivacyTx(clientCtx, txf, msgs...)
 }
 
+func BroadcastRawPrivacyTx(clientCtx client.Context, rawTxs []string) error {
+	for _, v := range rawTxs {
+		tx, err := clientCtx.TxConfig.TxJSONDecoder()([]byte(v))
+		if err != nil {
+			return err
+		}
+		txBytes, err := clientCtx.TxConfig.TxEncoder()(tx)
+		if err != nil {
+			return err
+		}
+		// broadcast to a Tendermint node
+		res, err := clientCtx.BroadcastTx(txBytes)
+		if err != nil {
+			return err
+		}
+		err = clientCtx.PrintProto(res)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // BroadcastPrivacyTx attempts to generate, sign and broadcast a transaction with the
 // given set of messages. It will also simulate gas requirements if necessary.
 // It will return an error upon failure.

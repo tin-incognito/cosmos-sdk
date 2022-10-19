@@ -28,17 +28,21 @@ func execCmd(command []string, isRawTx bool) {
 	}
 }
 
-func getBalanceIncognito(privateKey string) {
+func getBalanceIncognito(privateKey string, skipWaiting bool) {
 	fmt.Println("balance of", privateKey)
 	args := []string{"query", "privacy", "balance", privateKey}
 	execCmd(args, false)
-	fmt.Println("Press enter to continue")
-	fmt.Scanln()
+	if !skipWaiting {
+		fmt.Println("Press enter to continue")
+		fmt.Scanln()
+	}
 }
 
-func getBalanceCosmos(cosmosAccount string) {
+func getBalanceCosmos(cosmosAccount string, skipWaiting bool) {
 	args := []string{"query", "bank", "balances", cosmosAccount, "--chain-id", "my-test-chain"}
 	execCmd(args, false)
-	fmt.Println("Press enter to continue")
-	fmt.Scanln()
+	if !skipWaiting {
+		fmt.Println("Press enter to continue")
+		fmt.Scanln()
+	}
 }

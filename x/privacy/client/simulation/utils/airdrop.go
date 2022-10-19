@@ -7,9 +7,11 @@ import (
 	"github.com/incognitochain/go-incognito-sdk-v2/wallet"
 )
 
-func Airdrop(privateKey string) {
-	getBalanceIncognito(privateKey)
-	fmt.Println("Airdrop 100000 token to account with privateKey", privateKey)
+func Airdrop(privateKey string, skipWaiting bool) {
+	if !skipWaiting {
+		getBalanceIncognito(privateKey, skipWaiting)
+		fmt.Println("Airdrop 100000 token to account with privateKey", privateKey)
+	}
 	keyWallet, err := wallet.Base58CheckDeserialize(privateKey)
 	if err != nil {
 		panic(err)
@@ -22,7 +24,12 @@ func Airdrop(privateKey string) {
 
 	args := []string{"tx", "privacy", "airdrop", privateKey, "100000", "--from", "my_validator", "--chain-id", "my-test-chain", "-y"}
 	execCmd(args, true)
-	fmt.Println("Press enter to continue")
-	fmt.Scanln()
-	getBalanceIncognito(privateKey)
+	if skipWaiting {
+
+	}
+	if !skipWaiting {
+		fmt.Println("Press enter to continue")
+		fmt.Scanln()
+		getBalanceIncognito(privateKey, skipWaiting)
+	}
 }

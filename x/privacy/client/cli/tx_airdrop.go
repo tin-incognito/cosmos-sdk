@@ -51,10 +51,6 @@ func CmdAirdrop() *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 			clientCtx.GenerateOnly = true
 
 			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)

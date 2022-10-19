@@ -5,20 +5,23 @@ import (
 	"strconv"
 )
 
-func Unshield(privateKey, cosmosAccount string, amount uint64) {
-	// Check balance before shield
-	getBalanceIncognito(privateKey)
-	getBalanceCosmos(cosmosAccount)
+func Unshield(privateKey, cosmosAccount string, amount uint64, skipWaiting bool) {
+	if !skipWaiting {
+		// Check balance before shield
+		getBalanceIncognito(privateKey, skipWaiting)
+		getBalanceCosmos(cosmosAccount, skipWaiting)
+	}
 
 	execCmd([]string{
 		"tx", "privacy", "unshield", privateKey, cosmosAccount,
 		strconv.Itoa(int(amount)), "0prv",
 		"--from", "my_validator", "--chain-id", "my-test-chain", "-y",
 	}, true)
-	fmt.Scanln()
-	fmt.Println("Press enter to continue")
-
-	// Check balance after shield
-	getBalanceIncognito(privateKey)
-	getBalanceCosmos(cosmosAccount)
+	if !skipWaiting {
+		fmt.Scanln()
+		fmt.Println("Press enter to continue")
+		// Check balance after shield
+		getBalanceIncognito(privateKey, skipWaiting)
+		getBalanceCosmos(cosmosAccount, skipWaiting)
+	}
 }

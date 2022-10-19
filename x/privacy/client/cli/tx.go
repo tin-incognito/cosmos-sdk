@@ -34,6 +34,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdTransfer())
 	cmd.AddCommand(CmdShield())
 	cmd.AddCommand(CmdUnshield())
+	cmd.AddCommand(CmdBenchmark())
 
 	return cmd
 }

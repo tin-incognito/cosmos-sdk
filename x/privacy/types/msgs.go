@@ -53,6 +53,7 @@ func (msg *MsgPrivacyData) IsPrivacy() bool {
 /*
 Shield message
 */
+
 func (m *MsgShield) ValidateBasic() error {
 	return nil
 }
@@ -64,6 +65,7 @@ func (m *MsgShield) GetSigners() []sdk.AccAddress {
 
 func (m *MsgShield) IsPrivacy() bool {
 	return false
+	//return true // only for benchmark
 }
 
 func (msg *MsgShield) Route() string {

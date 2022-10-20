@@ -15,9 +15,9 @@ import (
 
 // GenerateOrBroadcastPrivacyTxCLI will either generate and print and unsigned transaction
 // or sign it and broadcast it returning an error upon failure.
-func GenerateOrBroadcastPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet, msgs ...sdk.Msg) (string, error) {
+func GenerateOrBroadcastPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet, isFromCosmosTx bool, msgs ...sdk.Msg) (string, error) {
 	txf := NewFactoryForPrivacyTxCLI(clientCtx, flagSet)
-	return GenerateOrBroadcastPrivacyTxWithFactory(clientCtx, txf, msgs...)
+	return GenerateOrBroadcastPrivacyTxWithFactory(clientCtx, txf, isFromCosmosTx, msgs...)
 }
 
 // NewFactoryCLI creates a new Factory.
@@ -69,7 +69,7 @@ func NewFactoryForPrivacyTxCLI(clientCtx client.Context, flagSet *pflag.FlagSet)
 
 // GenerateOrBroadcastTxWithFactory will either generate and print and unsigned transaction
 // or sign it and broadcast it returning an error upon failure.
-func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) (string, error) {
+func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Factory, isFromCosmosTx bool, msgs ...sdk.Msg) (string, error) {
 	// Validate all msgs before generating or broadcasting the tx.
 	// We were calling ValidateBasic separately in each CLI handler before.
 	// Right now, we're factorizing that call inside this function.
@@ -81,7 +81,30 @@ func GenerateOrBroadcastPrivacyTxWithFactory(clientCtx client.Context, txf Facto
 	}
 
 	if clientCtx.GenerateOnly {
-		return GenerateTx(clientCtx, txf, msgs...)
+		var err error
+		if isFromCosmosTx {
+			txf, err = prepareFactory(clientCtx, txf)
+			if err != nil {
+				return "", err
+			}
+		}
+		tx, err := GenerateTx(clientCtx, txf, msgs...)
+		if err != nil {
+			return "", err
+		}
+		if isFromCosmosTx {
+			tx.SetFeeGranter(clientCtx.GetFeeGranterAddress())
+			err = Sign(txf, clientCtx.GetFromName(), tx, true)
+			if err != nil {
+				return "", err
+			}
+		}
+		txBytes, err := clientCtx.TxConfig.TxJSONEncoder()(tx.GetTx())
+		if err != nil {
+			return "", err
+		}
+		clientCtx.PrintString(fmt.Sprintf("%s\n", string(txBytes)))
+		return string(txBytes), nil
 	}
 
 	return "", BroadcastPrivacyTx(clientCtx, txf, msgs...)

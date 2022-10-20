@@ -53,7 +53,7 @@ func CmdAirdrop() *cobra.Command {
 			}
 			clientCtx.GenerateOnly = true
 
-			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), false, msg)
 			return err
 		},
 	}

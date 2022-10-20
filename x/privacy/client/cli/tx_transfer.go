@@ -94,7 +94,7 @@ func CmdTransfer() *cobra.Command {
 			pflag.Set("gas-prices", fmt.Sprintf("%v", gasPriceArgs))
 			clientCtx.GenerateOnly = true
 
-			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), false, msg)
 			return err
 		},
 	}

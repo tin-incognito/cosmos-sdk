@@ -55,7 +55,8 @@ func CmdShield() *cobra.Command {
 			}
 			clientCtx.GenerateOnly = true
 
-			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), msg)
+			_, err = tx.GenerateOrBroadcastPrivacyTxCLI(clientCtx, cmd.Flags(), true, msg)
+			//_, err = tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 			return err
 		},
 	}

@@ -55,15 +55,15 @@ func GenerateOrBroadcastTxWithFactory(clientCtx client.Context, txf Factory, msg
 // specified by ctx.Output. If simulation was requested, the gas will be
 // simulated and also printed to the same writer before the transaction is
 // printed.
-func GenerateTx(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) (string, error) {
+func GenerateTx(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) (client.TxBuilder, error) {
 	if txf.SimulateAndExecute() {
 		if clientCtx.Offline {
-			return "", errors.New("cannot estimate gas in offline mode")
+			return nil, errors.New("cannot estimate gas in offline mode")
 		}
 
 		_, adjusted, err := CalculateGas(clientCtx, txf, msgs...)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 
 		txf = txf.WithGas(adjusted)
@@ -72,16 +72,10 @@ func GenerateTx(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) (string,
 
 	tx, err := BuildUnsignedTx(txf, msgs...)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	json, err := clientCtx.TxConfig.TxJSONEncoder()(tx.GetTx())
-	if err != nil {
-		return "", err
-	}
-	clientCtx.PrintString(fmt.Sprintf("%s\n", json))
-
-	return fmt.Sprintf("%s\n", json), nil
+	return tx, nil
 }
 
 // BroadcastTx attempts to generate, sign and broadcast a transaction with the

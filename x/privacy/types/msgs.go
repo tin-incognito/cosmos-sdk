@@ -65,7 +65,6 @@ func (m *MsgShield) GetSigners() []sdk.AccAddress {
 
 func (m *MsgShield) IsPrivacy() bool {
 	return false
-	//return true // only for benchmark
 }
 
 func (msg *MsgShield) Route() string {

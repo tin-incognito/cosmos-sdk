@@ -27,5 +27,8 @@ func main() {
 			"incog187jvy7vxu33savdjz7pxwecr4qz55run7jwuj0",
 			true,
 		)
+	case "bank":
+		utils.BankTransfer("incog1q9kcvyf89eewavtd8lgu3zh6qx3k67y8tlqkk8", "incog187jvy7vxu33savdjz7pxwecr4qz55run7jwuj0", 500, false)
 	}
+
 }

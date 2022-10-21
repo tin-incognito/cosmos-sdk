@@ -46,3 +46,10 @@ func getBalanceCosmos(cosmosAccount string, skipWaiting bool) {
 		fmt.Scanln()
 	}
 }
+
+type PrivacyAccount struct {
+	PrivateKey     string `json:"private_key"`
+	PaymentAddress string `json:"payment_address"`
+}
+
+type CosmosAccount string

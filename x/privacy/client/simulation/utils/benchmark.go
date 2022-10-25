@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 )
 
-func Benchmark(privateKey0, privateKey1, paymentAddress0, paymentAddress1, cosmosAccount0, cosmosAccount1 string, skipWaiting bool) {
+func Benchmark(validatorPrivateKey, validatorPaymentAddress, validatorCosmosAccount string, skipWaiting bool) {
 
-	benchmarkWithStrategy(skipWaiting)
+	benchmarkWithStrategy(validatorPrivateKey, validatorPaymentAddress, validatorCosmosAccount, skipWaiting)
 
 	// commit rawtxs
 	data, err := json.Marshal(rawTxs)
@@ -21,7 +21,7 @@ func Benchmark(privateKey0, privateKey1, paymentAddress0, paymentAddress1, cosmo
 	}
 }
 
-func benchmarkWithStrategy(skipWaiting bool) {
+func benchmarkWithStrategy(validatorPrivateKey, validatorPaymentAddress, validatorCosmosAccount string, skipWaiting bool) {
 	var cosmosAccounts []CosmosAccount
 	var privacyAccounts []PrivacyAccount
 
@@ -49,8 +49,8 @@ func benchmarkWithStrategy(skipWaiting bool) {
 	/*if i == 0 {*/
 	/*continue*/
 	/*}*/
-	/*BankTransfer(string(cosmosAccounts[0]), string(v), 100000, true)*/
-	/*time.Sleep(time.Second * 10)*/
+	/*BankTransfer(validatorCosmosAccount, string(v), 100000, true)*/
+	/*time.Sleep(time.Second * 5)*/
 	/*}*/
 
 	for i, v := range cosmosAccounts {
@@ -58,10 +58,9 @@ func benchmarkWithStrategy(skipWaiting bool) {
 			continue
 		}
 		fmt.Println(v)
-		rootPrivacyAccount := privacyAccounts[0]
 		privacyAccount := privacyAccounts[i]
-		//Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 20000, skipWaiting)
-		Transfer(privacyAccount.PrivateKey, rootPrivacyAccount.PrivateKey, rootPrivacyAccount.PaymentAddress, skipWaiting)
-		/*Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)*/
+		//Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 90000, skipWaiting)
+		Transfer(privacyAccount.PrivateKey, validatorPrivateKey, validatorPaymentAddress, skipWaiting)
+		//Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)
 	}
 }

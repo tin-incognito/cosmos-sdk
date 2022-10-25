@@ -49,6 +49,7 @@ func chooseCoinsByKeySet(
 	if err != nil {
 		return nil, nil, 0, err
 	}
+	fmt.Println("coinsByKeySet:", coinsByKeySet)
 
 	for _, item := range coinsByKeySet {
 		queryClient := types.NewQueryClient(clientContext)
@@ -144,7 +145,7 @@ func getCoinsByKeySet(coins []types.OutputCoin, keySet key.KeySet) ([]*OutputCoi
 			index: outputCoin.Index,
 			value: o,
 		}
-		o, err = o.Decrypt(&keySet)
+		_, err = o.Decrypt(&keySet)
 		if err != nil {
 			return nil, err
 		}
@@ -193,7 +194,7 @@ func chooseBestOutCoinsToSpent(coins []*OutputCoin, amount uint64) ([]*OutputCoi
 		remainOutputCoins = append(remainOutputCoins, outCoinOverLimit)
 	}
 	if totalResultOutputCoinAmount < amount {
-		return resultOutputCoins, remainOutputCoins, totalResultOutputCoinAmount, fmt.Errorf("Not enought coin")
+		return resultOutputCoins, remainOutputCoins, totalResultOutputCoinAmount, fmt.Errorf("not enought coin")
 	} else {
 		return resultOutputCoins, remainOutputCoins, totalResultOutputCoinAmount, nil
 	}

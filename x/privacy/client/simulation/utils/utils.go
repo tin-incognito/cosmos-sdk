@@ -8,7 +8,7 @@ import (
 
 var rawTxs []string
 
-func execCmd(command []string, isRawTx bool) {
+func execCmd(command []string, isRawTx bool) string {
 	fmt.Println("execFileDir:", execFileDir)
 	fmt.Println("command:", command)
 	cmd := exec.Command(execFileDir, command...)
@@ -20,12 +20,13 @@ func execCmd(command []string, isRawTx bool) {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
-		return
+		return ""
 	}
 	fmt.Println("Result: " + out.String())
 	if isRawTx {
 		rawTxs = append(rawTxs, out.String())
 	}
+	return out.String()
 }
 
 func getBalanceIncognito(privateKey string, skipWaiting bool) {

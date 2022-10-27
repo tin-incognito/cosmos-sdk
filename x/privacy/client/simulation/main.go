@@ -21,7 +21,6 @@ func main() {
 		utils.Benchmark(
 			"112t8roMiguHp5SZxXpnoTHiV8A7XWkm79Y4hWwrqjtvjDH52H4y6z5RBt8HqqmKXSZ33CGjd2uM4ZiG32hqMzytboMA7zrBGscciRRVG4rH",
 			"12scjGeftnVsH4Xa2CsRpkqctZaY77asQQMq84Gqx3itNRZaaQxfCDARXfrVZrsSK63pGPC2DzYwdEhLAjAyrUKErGeZfcL2v7HXXTVLee6Gwvr5NsruJRCqiHnQ9aaGsYGDKy8mgTzu1pJfPdv8",
-			"incog1vn0erj62j8tn6nzugvrwxgw5a95prfdrvq6n7v",
 			true,
 		)
 	case "bank":

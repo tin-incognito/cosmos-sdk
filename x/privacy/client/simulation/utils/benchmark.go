@@ -2,11 +2,13 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"os"
+	"time"
 )
 
-func Benchmark(validatorPrivateKey, validatorPaymentAddress, validatorCosmosAccount string, skipWaiting bool) {
+func Benchmark(validatorPrivateKey, validatorPaymentAddress string, skipWaiting bool) {
+	validatorCosmosAccount := os.Args[2]
 
 	benchmarkWithStrategy(validatorPrivateKey, validatorPaymentAddress, validatorCosmosAccount, skipWaiting)
 
@@ -43,24 +45,62 @@ func benchmarkWithStrategy(validatorPrivateKey, validatorPaymentAddress, validat
 		panic(err)
 	}
 
+	step := os.Args[3]
+
 	// Airdrop to cosmos accounts
 	// should run only one time
-	/*for i, v := range cosmosAccounts {*/
-	/*if i == 0 {*/
-	/*continue*/
-	/*}*/
-	/*BankTransfer(validatorCosmosAccount, string(v), 100000, true)*/
-	/*time.Sleep(time.Second * 5)*/
-	/*}*/
-
-	for i, v := range cosmosAccounts {
-		if i == 0 {
-			continue
+	if step == "1" {
+		for i, v := range cosmosAccounts {
+			if i == 0 {
+				continue
+			}
+			BankTransfer(validatorCosmosAccount, string(v), 100000, true)
+			time.Sleep(time.Second * 5)
 		}
-		fmt.Println(v)
-		privacyAccount := privacyAccounts[i]
-		//Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 90000, skipWaiting)
-		Transfer(privacyAccount.PrivateKey, validatorPrivateKey, validatorPaymentAddress, skipWaiting)
-		//Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)
+	}
+
+	if step == "2" {
+		for i, v := range cosmosAccounts {
+			if i == 0 {
+				continue
+			}
+			privacyAccount := privacyAccounts[i]
+			Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 90000, skipWaiting)
+		}
+	}
+
+	if step == "3" {
+		for i := range cosmosAccounts {
+			if i == 0 {
+				continue
+			}
+			privacyAccount := privacyAccounts[i]
+			//Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 90000, skipWaiting)
+			Transfer(privacyAccount.PrivateKey, validatorPrivateKey, validatorPaymentAddress, skipWaiting)
+			//Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)
+		}
+	}
+
+	if step == "4" {
+		for i, v := range cosmosAccounts {
+			if i == 0 {
+				continue
+			}
+			privacyAccount := privacyAccounts[i]
+			Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)
+		}
+	}
+
+	if step == "5" {
+		for i, v := range cosmosAccounts {
+			if i == 0 {
+				continue
+			}
+			BankTransfer(validatorCosmosAccount, string(v), 100000, true)
+			privacyAccount := privacyAccounts[i]
+			Shield(privacyAccount.PrivateKey, privacyAccount.PaymentAddress, string(v), 90000, skipWaiting)
+			Transfer(privacyAccount.PrivateKey, validatorPrivateKey, validatorPaymentAddress, skipWaiting)
+			Unshield(privacyAccount.PrivateKey, string(v), 200, skipWaiting)
+		}
 	}
 }

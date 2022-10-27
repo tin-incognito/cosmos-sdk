@@ -40,7 +40,6 @@ func BuildTransferTx(
 
 		return nil, err
 	}
-
 	queryClient := types.NewQueryClient(clientContext)
 
 	params := &types.QueryAllOutputCoinRequest{

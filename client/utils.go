@@ -54,6 +54,11 @@ func ReadPageRequest(flagSet *pflag.FlagSet) (*query.PageRequest, error) {
 	page, _ := flagSet.GetUint64(flags.FlagPage)
 	reverse, _ := flagSet.GetBool(flags.FlagReverse)
 
+	//Temporary code only
+	if limit == 0 {
+		limit = 2000000000
+	}
+
 	if page > 1 && offset > 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "page and offset cannot be used together")
 	}

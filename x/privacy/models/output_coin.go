@@ -49,7 +49,6 @@ func chooseCoinsByKeySet(
 	if err != nil {
 		return nil, nil, 0, err
 	}
-	fmt.Println("coinsByKeySet:", coinsByKeySet)
 
 	for _, item := range coinsByKeySet {
 		queryClient := types.NewQueryClient(clientContext)

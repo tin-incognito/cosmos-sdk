@@ -20,7 +20,6 @@ func Transfer(privateKey0, privateKey1, paymentAddress string, skipWaiting bool)
 	}
 
 	// transfer
-	fmt.Println("Start transfer")
 	temp := paymentAddress + "-100"
 	args := []string{"tx", "privacy", "transfer", privateKey0, temp, "0prv", "--from", "my_validator", "--chain-id", "my-test-chain", "-y"}
 	execCmd(args, true)

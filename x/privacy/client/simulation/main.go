@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/x/privacy/client/simulation/utils"
 )
@@ -26,7 +27,12 @@ func main() {
 	case "bank":
 		utils.BankTransfer("incog1q9kcvyf89eewavtd8lgu3zh6qx3k67y8tlqkk8", "incog187jvy7vxu33savdjz7pxwecr4qz55run7jwuj0", 500, false)
 	case "keys":
-		utils.AddKeys(1000)
+		temp := os.Args[2]
+		amt, err := strconv.Atoi(temp)
+		if err != nil {
+			panic(err)
+		}
+		utils.AddKeys(amt)
 	}
 
 }

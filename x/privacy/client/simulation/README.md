@@ -17,7 +17,7 @@ Choose one in two options
 
 Run by these commands in exactly order
 
-1. Send as many as possible token to validator_address
+1. Send as many as possible token to `validator_address`
 1. `go run main.go {{validator_address}} 1` (bank)
 1. `go run main.go {{validator_address}} 2` (shield)
 1. After exec cmd file `output.json` will appear

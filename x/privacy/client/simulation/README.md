@@ -1,6 +1,6 @@
 To benchmark privacy cosmos
 
-### Prerequisite:
+### Prerequisites:
 
 1. Init `privacy_accounts.json` file by `incognito cli` repo (use this branch `benchmark/init-privacy-accounts`)
 2. Init `cosmos_accounts.json` file by run this command `go run main.go keys {{amount}}` in `x/privacy/client/simulation`
@@ -13,7 +13,7 @@ Choose one in two options
 1. Change password in file keyring/keyring.go to your os password
 2. Change password in your os to "11234566"
 
-### Flow to runn:
+### Flow to run:
 
 Run by these commands in exactly order
 

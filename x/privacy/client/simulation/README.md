@@ -2,7 +2,7 @@ To benchmark privacy cosmos
 
 ### Prerequisite:
 
-1. Init `privacy_accounts.json` file by incognito cli
+1. Init `privacy_accounts.json` file by `incognito cli` repo (use this branch `benchmark/init-privacy-accounts`)
 2. Init `cosmos_accounts.json` file by run this command `go run main.go keys {{amount}}` in `x/privacy/client/simulation`
 3. With amount is the amount of cosmos account number
 

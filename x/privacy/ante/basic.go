@@ -46,7 +46,9 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 			if err != nil {
 				return ctx, err
 			}
-
+			if _, err := vbi.c.GetTxValidateByItself(*key); err == nil {
+				return next(ctx, tx, simulate)
+			}
 			proof, err := vbi.c.GetProof(*key)
 			if err != nil {
 				proof := repos.NewPaymentProof()
@@ -101,6 +103,9 @@ func (vbi ValidateByItself) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 				if !valid {
 					return ctx, fmt.Errorf("can not validate metadata by itself")
 				}
+			}
+			if err := vbi.c.SetTxValidateByItself(*key, &TxCache{Fee: msg.Fee}); err != nil {
+				return ctx, err
 			}
 		}
 

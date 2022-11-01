@@ -46,6 +46,9 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 			if err != nil {
 				return ctx, err
 			}
+			if _, err := vbdd.c.GetTxValidateByDb(*key); err == nil {
+				return next(ctx, tx, simulate)
+			}
 			proof, err := vbdd.c.GetProof(*key)
 			if err != nil {
 				proof = repos.NewPaymentProof()
@@ -88,6 +91,9 @@ func (vbdd ValidateByDbDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulat
 				if !valid {
 					return ctx, fmt.Errorf("can not validate metadata by itself")
 				}
+			}
+			if err := vbdd.c.SetTxValidateByDb(*key, &TxCache{Fee: msg.Fee}); err != nil {
+				return ctx, err
 			}
 		}
 	default:

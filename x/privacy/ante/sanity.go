@@ -63,6 +63,9 @@ func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 		if err != nil {
 			return false, err
 		}
+		if _, err := c.GetTxValidateSanity(*key); err == nil {
+			return true, nil
+		}
 		proof, err := c.GetProof(*key)
 		if err != nil {
 			proof = repos.NewPaymentProof()
@@ -104,6 +107,9 @@ func validateSanity(msg sdk.Msg, c *Cache) (bool, error) {
 			if !valid {
 				return false, fmt.Errorf("can not validate metadata by itself")
 			}
+		}
+		if err := c.SetTxValidateSanity(*key, &TxCache{Fee: msg.Fee}); err != nil {
+			return false, err
 		}
 		return true, nil
 	default:
